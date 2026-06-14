@@ -329,7 +329,7 @@ async function sendOrder() {
     elements.sendOrderBtn.disabled = true;
     elements.sendOrderBtn.innerHTML = '<i class="fab fa-telegram-plane"></i> Отправляем...';
 
-    const response = await fetch("https://kunik-backend.onrender.com/send-order", {
+    const response = await fetch("https://pont-site.onrender.com/send-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
