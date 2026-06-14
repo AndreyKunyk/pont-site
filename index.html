@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PONT</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <h1 class="logo">PONT</h1>
+    <nav>
+      <a href="#shawarma">Меню</a>
+      <a href="#about">О нас</a>
+      <a href="#contact">Контакты</a>
+
+      <button class="cart-toggle" id="cart-toggle" type="button">
+        <i class="fas fa-shopping-bag"></i>
+        <span>Корзина</span>
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+    </nav>
+  </header>
+
+  <section class="hero visible">
+    <div class="hero-content">
+      <h2>PONT</h2>
+      <p>Свежие ингредиенты. Авторские соусы. Без компромиссов по качеству.</p>
+      <button class="btn" onclick="window.location.href='#shawarma'">Сделать заказ</button>
+    </div>
+  </section>
+
+  <section id="shawarma" class="visible">
+    <h2>Шаурма</h2>
+
+    <div class="menu-tabs">
+      <a href="#shawarma" class="menu-tab active">Шаурма</a>
+      <a href="#combo" class="menu-tab">Комбо</a>
+      <a href="#snacks" class="menu-tab">Закуски</a>
+      <a href="#sauces" class="menu-tab">Соусы</a>
+      <a href="#drinks" class="menu-tab">Напитки</a>
+    </div>
+
+    <div class="menu">
+      <div class="item">
+        <img src="5215357575149325867.jpg" alt="Сен-Мишель">
+        <h3>Сен-Мишель</h3>
+        <p>
+          Лаваш собственного приготовления в печи, в который заворачивается
+          фирменное куриное бедро, томаты, фирменный соус, пекинская капуста
+          и свежие огурцы.
+        </p>
+        <div class="card-actions">
+          <div class="price">480 ₽</div>
+          <button class="btn add-to-cart"
+                  data-name="Сен-Мишель"
+                  data-price="480"
+                  data-image="5215357575149325867.jpg"
+                  type="button">
+            Добавить в заказ
+          </button>
+        </div>
+      </div>
+
+      <div class="item product-clickable" id="ser-product-trigger">
+        <img src="ser.jpg" alt="Сэр-Жермен">
+        <h3>Сэр-Жермен</h3>
+        <p>
+          Лаваш собственного приготовления в печи, в который заворачивается
+          котлета собственного приготовления из мраморной говядины, фирменный
+          соус, сыр, пекинская капуста, томаты и халапеньо.
+        </p>
+        <div class="card-actions">
+          <div class="price">590 ₽</div>
+          <button class="btn open-ser-modal" type="button">
+            Добавить в заказ
+          </button>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="mon.jpg" alt="Мон-Моди">
+        <h3>Мон-Моди</h3>
+        <p>
+          Лаваш собственного приготовления в печи, в который заворачивается
+          фирменный куриный шницель, фирменный соус, пекинская капуста,
+          томаты, сыр и луковые колечки.
+        </p>
+        <div class="card-actions">
+          <div class="price">690 ₽</div>
+          <button class="btn add-to-cart"
+                  data-name="Мон-Моди"
+                  data-price="690"
+                  data-image="mon.jpg"
+                  type="button">
+            Добавить в заказ
+          </button>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="fantanuni.jpg" alt="Фантанини">
+        <h3>Фантанини</h3>
+        <p>
+          Лаваш собственного приготовления в печи, в который заворачивается
+          фирменное куриное бедро, томаты, фирменный соус, чеснок, пекинская
+          капуста, сыр и ананасы.
+        </p>
+        <div class="card-actions">
+          <div class="price">570 ₽</div>
+          <button class="btn add-to-cart"
+                  data-name="Фантанини"
+                  data-price="570"
+                  data-image="fantanuni.jpg"
+                  type="button">
+            Добавить в заказ
+          </button>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="krytini.jpg" alt="Крутини">
+        <h3>Крутини</h3>
+        <p>
+          Лаваш собственного приготовления в печи, в который заворачивается
+          котлета собственного приготовления из мраморной говядины, фирменный
+          соус, огурцы, пекинская капуста, томаты, халапеньо и корейская морковка.
+        </p>
+        <div class="card-actions">
+          <div class="price">580 ₽</div>
+          <button class="btn add-to-cart"
+                  data-name="Крутини"
+                  data-price="580"
+                  data-image="krytini.jpg"
+                  type="button">
+            Добавить в заказ
+          </button>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="minikyr.jpg" alt="Миникюр">
+        <h3>Миникюр</h3>
+        <p>
+          Лаваш собственного приготовления в печи, в который заворачиваются
+          свежие томаты, огурцы, пекинская капуста, цукини, болгарский перец
+          и фирменный соус.
+        </p>
+        <div class="card-actions">
+          <div class="price">330 ₽</div>
+          <button class="btn add-to-cart"
+                  data-name="Миникюр"
+                  data-price="330"
+                  data-image="minikyr.jpg"
+                  type="button">
+            Добавить в заказ
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="combo" class="visible">
+    <h2>Комбо</h2>
+
+    <div class="menu">
+      <div class="item">
+        <img src="kom1.jpg" alt="Комбо «Клубничный PONT»">
+        <h3>Комбо «Клубничный PONT»</h3>
+        <p>
+          Клубничный чай, золотистый картофель фри и фирменный соус — сочное комбо для быстрого перекуса.
+        </p>
+
+        <div class="card-actions">
+          <div class="price">460 ₽</div>
+          <button class="btn add-to-cart"
+                  data-name="Комбо «Клубничный PONT»"
+                  data-price="460"
+                  data-image="kom1.jpg"
+                  type="button">
+            Добавить в заказ
+          </button>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="kom2.jpg" alt="Комбо «Облепиховый PONT»">
+        <h3>Комбо «Облепиховый PONT»</h3>
+        <p>
+          Облепиховый чай, золотистый картофель фри и фирменный соус — яркое сочетание вкуса, хруста и свежести.
+        </p>
+
+        <div class="card-actions">
+          <div class="price">460 ₽</div>
+          <button class="btn add-to-cart"
+                  data-name="Комбо «Облепиховый PONT»"
+                  data-price="460"
+                  data-image="kom2.jpg"
+                  type="button">
+            Добавить в заказ
+          </button>
+        </div>
+      </div>
+
+      <div class="item">
+        <img src="kom3.jpg" alt="Комбо «Лимонный PONT»">
+        <h3>Комбо «Лимонный PONT»</h3>
+        <p>
+          Лимонный чай с мятой, золотистый картофель фри и кисло-сладкий соус — освежающий сет с цитрусовым акцентом.
+        </p>
+
+        <div class="card-actions">
+          <div class="price">460 ₽</div>
+          <button class="btn add-to-cart"
+                  data-name="Комбо «Лимонный PONT»"
+                  data-price="460"
+                  data-image="kom3.jpg"
+                  type="button">
+            Добавить в заказ
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="snacks" class="visible">
+    <h2>Закуски</h2>
+    <div class="menu">
+
+  <div class="item">
+    <img src="kartoshka.jpg" alt="Картофель фри">
+    <h3>Картофель фри</h3>
+    <p>Хрустящий картофель с золотистой корочкой</p>
+    <div class="card-actions">
+      <div class="price">150 ₽</div>
+      <button class="btn add-to-cart"
+        data-name="Картофель фри"
+        data-price="150"
+        data-image="kartoshka.jpg">
+        Добавить в заказ
+      </button>
+    </div>
+  </div>
+
+  <div class="item">
+    <img src="sirpal.jpg" alt="Сырные палочки">
+    <h3>Сырные палочки</h3>
+    <p>Тянущийся сыр в хрустящей панировке</p>
+    <div class="card-actions">
+      <div class="price">200 ₽</div>
+      <button class="btn add-to-cart"
+        data-name="Сырные палочки"
+        data-price="200"
+        data-image="sirpal.jpg">
+        Добавить в заказ
+      </button>
+    </div>
+  </div>
+
+  <div class="item">
+    <img src="lyk.jpg" alt="Луковые кольца">
+    <h3>Луковые кольца</h3>
+    <p>Хрустящие кольца с золотистой корочкой</p>
+    <div class="card-actions">
+      <div class="price">150 ₽</div>
+      <button class="btn add-to-cart"
+        data-name="Луковые кольца"
+        data-price="150"
+        data-image="lyk.jpg">
+        Добавить в заказ
+      </button>
+    </div>
+  </div>
+
+  <div class="item">
+    <img src="batat.jpg" alt="Батат">
+    <h3>Батат</h3>
+    <p>Сладкий картофель с хрустящей корочкой</p>
+    <div class="card-actions">
+      <div class="price">250 ₽</div>
+      <button class="btn add-to-cart"
+        data-name="Батат"
+        data-price="250"
+        data-image="batat.jpg">
+        Добавить в заказ
+      </button>
+    </div>
+  </div>
+
+  <div class="item">
+    <img src="krev.jpg" alt="Креветки">
+    <h3>Креветки</h3>
+    <p>Жареные креветки в панировке</p>
+    <div class="card-actions">
+      <div class="price">330 ₽</div>
+      <button class="btn add-to-cart"
+        data-name="Креветки"
+        data-price="330"
+        data-image="krev.jpg">
+        Добавить в заказ
+      </button>
+    </div>
+  </div>
+
+</div>
+  </section>
+
+  <section id="sauces" class="visible">
+  <h2>Соусы</h2>
+
+  <div class="menu">
+    <div class="item">
+      <img src="sfirm.jpg" alt="Фирменный">
+      <h3>Фирменный</h3>
+      <p>Авторский фирменный соус PONT.</p>
+      <div class="card-actions">
+        <div class="price">60 ₽</div>
+        <button class="btn add-to-cart"
+                data-name="Фирменный соус"
+                data-price="60"
+                data-image="sfirm.jpg"
+                type="button">
+          Добавить в заказ
+        </button>
+      </div>
+    </div>
+
+    <div class="item">
+      <img src="ketchup.jpg" alt="Кетчуп">
+      <h3>Кетчуп</h3>
+      <p>Классический томатный соус.</p>
+      <div class="card-actions">
+        <div class="price">60 ₽</div>
+        <button class="btn add-to-cart"
+                data-name="Кетчуп"
+                data-price="60"
+                data-image="ketchup.jpg"
+                type="button">
+          Добавить в заказ
+        </button>
+      </div>
+    </div>
+
+    <div class="item">
+      <img src="chesn.jpg" alt="Чесночный">
+      <h3>Чесночный</h3>
+      <p>Нежный чесночный соус.</p>
+      <div class="card-actions">
+        <div class="price">60 ₽</div>
+        <button class="btn add-to-cart"
+                data-name="Чесночный соус"
+                data-price="60"
+                data-image="chesn.jpg"
+                type="button">
+          Добавить в заказ
+        </button>
+      </div>
+    </div>
+
+    <div class="item">
+      <img src="sirn.jpg" alt="Сырный">
+      <h3>Сырный</h3>
+      <p>Нежный сливочно-сырный соус.</p>
+      <div class="card-actions">
+        <div class="price">60 ₽</div>
+        <button class="btn add-to-cart"
+                data-name="Сырный соус"
+                data-price="60"
+                data-image="sirn.jpg"
+                type="button">
+          Добавить в заказ
+        </button>
+      </div>
+    </div>
+
+    <div class="item">
+      <img src="kisl.jpg" alt="Кисло-сладкий">
+      <h3>Кисло-сладкий</h3>
+      <p>Соус с приятной сладостью и лёгкой кислинкой.</p>
+      <div class="card-actions">
+        <div class="price">60 ₽</div>
+        <button class="btn add-to-cart"
+                data-name="Кисло-сладкий соус"
+                data-price="60"
+                data-image="kisl.jpg"
+                type="button">
+          Добавить в заказ
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section id="drinks" class="visible">
+    <h2>Напитки</h2>
+    <div class="menu">
+
+  <div class="item">
+    <img src="obl.jpg" alt="Чай облепиховый">
+    <h3>Чай облепиховый</h3>
+    <p>Ароматный облепиховый чай с ярким вкусом и пользой</p>
+
+    <div class="card-actions">
+      <div class="price">290 ₽</div>
+      <button class="btn add-to-cart"
+        data-name="Чай облепиховый"
+        data-price="290"
+        data-image="obl.jpg">
+        Добавить в заказ
+      </button>
+    </div>
+  </div>
+
+<div class="item">
+    <img src="lim.jpg" alt="Чай лимонный">
+    <h3>Чай лимонный</h3>
+    <p>Ароматный лимонный чай с ярким вкусом и пользой</p>
+
+    <div class="card-actions">
+      <div class="price">290 ₽</div>
+      <button class="btn add-to-cart"
+        data-name="Чай лимонный"
+        data-price="290"
+        data-image="lim.jpg">
+        Добавить в заказ
+      </button>
+    </div>
+  </div>
+
+
+<div class="item">
+    <img src="klub.jpg" alt="Чай клубинчный">
+    <h3>Чай клубничный</h3>
+    <p>Ароматный клубничный чай с ярким вкусом и пользой</p>
+
+    <div class="card-actions">
+      <div class="price">290 ₽</div>
+      <button class="btn add-to-cart"
+        data-name="Чай клубничный"
+        data-price="290"
+        data-image="klub.jpg">
+        Добавить в заказ
+      </button>
+    </div>
+  </div>	
+
+</div>
+  </section>
+
+  <section id="advantages" class="visible">
+    <h2>Почему PONT</h2>
+    <div class="advantages">
+      <div class="adv-card">
+        <h3>Свежие продукты</h3>
+        <p>Используем только свежее мясо и овощи каждый день.</p>
+      </div>
+
+      <div class="adv-card">
+        <h3>Авторские соусы</h3>
+        <p>Уникальные рецепты, которые делают вкус особенным.</p>
+      </div>
+
+      <div class="adv-card">
+        <h3>Быстрый заказ</h3>
+        <p>Оформляйте заказ за пару кликов через Telegram.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="visible">
+    <h2>О нас</h2>
+    <p>
+      В PONT мы превращаем уличную еду в премиальное удовольствие.
+      Только свежее мясо, овощи и соусы по авторским рецептам.
+      Мы создаём вкус, который запоминается.
+    </p>
+  </section>
+
+  <section id="contact" class="visible">
+    <h2>Контакты</h2>
+    <p>📍 Московская область, Мытищи, проспект Астрахова 14А</p>
+    <p>📞 +7 (916) 429-16-20</p>
+    <p>🕒 Ежедневно: 10:00–22:00</p>
+
+    <div class="contact-buttons">
+      <button class="btn telegram-btn" type="button" onclick="window.open('https://t.me/andreytoo','_blank')">
+        <i class="fab fa-telegram-plane"></i>
+        Заказать в Telegram
+      </button>
+
+      <button class="btn map-btn"
+              type="button"
+              onclick="window.open('https://yandex.ru/maps/org/shaurmynet/241220365953?si=bnf9d038uh9z1yaw22u5wmm1fw','_blank')">
+        Открыть на карте
+      </button>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 PONT. Все права защищены.
+  </footer>
+
+  <a class="floating-telegram" href="https://t.me/andreytoo" target="_blank" aria-label="Telegram">
+    <i class="fab fa-telegram-plane"></i>
+  </a>
+
+  <div class="cart-overlay" id="cart-overlay"></div>
+
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-drawer-header">
+      <h2>Ваш заказ</h2>
+      <button class="cart-close" id="cart-close" type="button">&times;</button>
+    </div>
+
+    <div class="cart-drawer-body" id="cart-items">
+      <div class="empty-cart">Корзина пока пуста</div>
+    </div>
+
+    <div class="cart-drawer-footer">
+      <div class="promo-block">
+        <label for="promo-input" class="promo-label">Промокод</label>
+        <div class="promo-row">
+          <input type="text" id="promo-input" class="promo-input" placeholder="Введите промокод">
+          <button class="btn promo-btn" id="apply-promo-btn" type="button">Применить</button>
+        </div>
+        <p class="promo-message" id="promo-message"></p>
+      </div>
+
+      <div class="cart-summary-list">
+        <div class="summary-row">
+          <span>Товаров</span>
+          <strong id="cart-count">0</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Бонусы</span>
+          <strong id="cart-bonus">0 ₽</strong>
+        </div>
+
+        <div class="summary-row" id="discount-row" style="display: none;">
+          <span>Скидка</span>
+          <strong id="cart-discount">0 ₽</strong>
+        </div>
+
+        <div class="summary-row total-row">
+          <span>Сумма заказа</span>
+          <strong id="cart-total">0 ₽</strong>
+        </div>
+      </div>
+
+      <button class="btn telegram-btn checkout-btn" id="send-order-btn" type="button">
+        <i class="fab fa-telegram-plane"></i>
+        К оформлению заказа
+      </button>
+
+      <button class="btn clear-btn checkout-btn" id="clear-cart-btn" type="button">
+        Очистить корзину
+      </button>
+    </div>
+  </aside>
+
+  <div class="product-modal-overlay" id="product-modal-overlay"></div>
+
+  <div class="product-modal" id="ser-modal">
+    <button class="product-modal-close" id="ser-modal-close" type="button">&times;</button>
+
+    <div class="product-modal-content">
+      <div class="product-modal-image-wrap">
+        <img src="ser.jpg" alt="Сэр-Жермен" class="product-modal-image">
+      </div>
+
+      <div class="product-modal-info">
+        <h2>Сэр-Жермен</h2>
+        <p class="product-modal-desc">
+          Лаваш собственного приготовления в печи, в который заворачивается
+          котлета собственного приготовления из мраморной говядины, фирменный
+          соус, сыр, пекинская капуста, томаты и халапеньо.
+        </p>
+        <p class="product-modal-base-price">Базовая цена: 590 ₽</p>
+
+        <h3>Добавить по вкусу</h3>
+
+        <div class="option-list">
+  <label class="option-card">
+    <input type="checkbox" name="ser-addon" value="50" data-title="халапеньо x2">
+    <span class="option-title">Халапеньо x2</span>
+    <span class="option-price">+50 ₽</span>
+  </label>
+
+  <label class="option-card">
+    <input type="checkbox" name="ser-addon" value="60" data-title="сыр">
+    <span class="option-title">Дополнительный сыр</span>
+    <span class="option-price">+60 ₽</span>
+  </label>
+
+  <label class="option-card">
+    <input type="checkbox" name="ser-addon" value="150" data-title="котлета">
+    <span class="option-title">Дополнительная котлета</span>
+    <span class="option-price">+150 ₽</span>
+  </label>
+</div>
+
+        <button class="btn modal-add-btn" id="ser-modal-add-btn" type="button">
+          В корзину за 590 ₽
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+<div id="notification" class="notification"></div>
+</body>
+</html>
