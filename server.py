@@ -33,6 +33,9 @@ def send_order():
         if not customer_phone:
             return jsonify({"ok": False, "error": "Не указан телефон"}), 400
 
+        if not BOT_TOKEN or not CHAT_ID:
+            return jsonify({"ok": False, "error": "Не настроены переменные Telegram"}), 500
+
         message = "Новый заказ с сайта PONT\n\n"
         message += f"Клиент: {customer_name}\n"
         message += f"Телефон: {customer_phone}\n"

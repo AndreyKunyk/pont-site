@@ -598,12 +598,17 @@ section h2 {
   text-align: left;
 }
 .customer-block {
-  background: #fff;
-  border: 1px solid #f0f0f0;
-  padding: 12px;
-  border-radius: 16px;
+  display: none;
+  background: #fff8f2;
+  border: 1px solid #ffe0c2;
+  padding: 14px;
+  border-radius: 18px;
   margin-bottom: 10px;
   text-align: left;
+}
+
+.cart-drawer.checkout-mode .customer-block {
+  display: block;
 }
 
 .customer-input {

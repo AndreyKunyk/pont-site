@@ -309,6 +309,10 @@ function clearCart() {
   cart.length = 0;
   appliedPromo = "";
 
+  if (elements.cartDrawer) {
+    elements.cartDrawer.classList.remove("checkout-mode");
+  }
+
   if (elements.promoMessage) {
     elements.promoMessage.textContent = "";
     elements.promoMessage.classList.remove("error");
@@ -330,17 +334,22 @@ function resetCartAfterOrder() {
   if (elements.promoInput) {
     elements.promoInput.value = "";
   }
+
   if (elements.customerName) {
-  elements.customerName.value = "";
-}
+    elements.customerName.value = "";
+  }
 
-if (elements.customerPhone) {
-  elements.customerPhone.value = "";
-}
+  if (elements.customerPhone) {
+    elements.customerPhone.value = "";
+  }
 
-if (elements.customerComment) {
-  elements.customerComment.value = "";
-}  
+  if (elements.customerComment) {
+    elements.customerComment.value = "";
+  }
+
+  if (elements.cartDrawer) {
+    elements.cartDrawer.classList.remove("checkout-mode");
+  }
 
   renderCart();
 }
@@ -350,6 +359,14 @@ async function sendOrder() {
 
   if (cart.length === 0) {
     showNotification("Корзина пуста", true);
+    return;
+  }
+
+  if (elements.cartDrawer && !elements.cartDrawer.classList.contains("checkout-mode")) {
+    elements.cartDrawer.classList.add("checkout-mode");
+    elements.sendOrderBtn.innerHTML = `<i class="fab fa-telegram-plane"></i> Отправить заказ`;
+    showNotification("Введите данные для заказа");
+    setTimeout(() => elements.customerPhone?.focus(), 100);
     return;
   }
 const customerName = elements.customerName ? elements.customerName.value.trim() : "";
@@ -378,11 +395,11 @@ if (!customerPhone) {
         discount: totals.discount,
         total: totals.finalTotal,
         promo: appliedPromo,
-	customer: {
-  	  name: customerName || "Не указано",
+        customer: {
+          name: customerName || "Не указано",
           phone: customerPhone,
           comment: customerComment || ""
-}
+        }
       })
     });
 
