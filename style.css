@@ -1416,6 +1416,54 @@ footer p {
   font-weight: 900;
 }
 
+.pont-picker-secondary {
+  background: #242424;
+}
+
+.pont-picker-secondary:hover {
+  background: #333;
+}
+
+.shake-pont-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.shake-pont-card::after {
+  content: "";
+  position: absolute;
+  width: 190px;
+  height: 190px;
+  right: -72px;
+  top: -82px;
+  background: radial-gradient(circle, rgba(255, 126, 27, 0.23), rgba(255, 126, 27, 0));
+  pointer-events: none;
+}
+
+.shake-pont-actions {
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 330px;
+}
+
+.pont-shake-status {
+  width: 100%;
+  margin: 0;
+  color: #777;
+  font-size: 13px;
+  line-height: 1.45;
+  text-align: right;
+}
+
+#pont-shake-btn.shake-active {
+  animation: shakeButtonPulse 1.1s ease infinite;
+}
+
+@keyframes shakeButtonPulse {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-1px) scale(1.03); }
+}
+
 .pont-choice {
   grid-column: 1 / -1;
   background: #fff;
@@ -1966,4 +2014,41 @@ footer p {
   0% { transform: scale(1); }
   35% { transform: scale(1.08); }
   100% { transform: scale(1); }
+}
+
+
+/* Shake PONT mobile polish */
+@media (max-width: 700px) {
+  .pont-picker-section {
+    padding-top: 22px;
+    padding-bottom: 22px;
+  }
+
+  .pont-picker-card {
+    grid-template-columns: 1fr;
+    padding: 22px 18px;
+    border-radius: 24px;
+  }
+
+  .pont-picker-content h2 {
+    font-size: 1.55em;
+    line-height: 1.12;
+  }
+
+  .pont-picker-actions,
+  .shake-pont-actions {
+    justify-content: stretch;
+    max-width: none;
+    width: 100%;
+  }
+
+  .pont-picker-actions .btn,
+  .shake-pont-actions .btn {
+    width: 100%;
+  }
+
+  .pont-shake-status {
+    text-align: center;
+    font-size: 12px;
+  }
 }

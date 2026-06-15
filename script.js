@@ -92,6 +92,8 @@ const elements = {
   mobileMiniCartText: document.getElementById("mobile-mini-cart-text"),
   mobileMiniCartTotal: document.getElementById("mobile-mini-cart-total"),
 
+  pontShakeBtn: document.getElementById("pont-shake-btn"),
+  pontShakeStatus: document.getElementById("pont-shake-status"),
   pontPickBtn: document.getElementById("pont-pick-btn"),
   pontChoice: document.getElementById("pont-choice"),
   pontChoiceTitle: document.getElementById("pont-choice-title"),
@@ -106,6 +108,9 @@ const serOptionInputs = document.querySelectorAll('input[name="ser-addon"]');
 
 let logoTapCount = 0;
 let logoTapTimer = null;
+let shakePontEnabled = false;
+let lastShakeTime = 0;
+let lastMotion = null;
 
 function showNotification(text, isError = false) {
   if (!elements.notification) return;
@@ -524,12 +529,97 @@ function showPontRecommendation(recommendation) {
   setTimeout(() => elements.pontChoice.classList.add("show"), 10);
 }
 
-function pickPontRecommendation() {
+function getRandomPontRecommendation() {
   const randomIndex = Math.floor(Math.random() * PONT_RECOMMENDATIONS.length);
-  const recommendation = PONT_RECOMMENDATIONS[randomIndex];
+  return PONT_RECOMMENDATIONS[randomIndex];
+}
+
+function pickPontRecommendation(source = "button") {
+  const recommendation = getRandomPontRecommendation();
 
   showPontRecommendation(recommendation);
-  showNotification("PONT собрал заказ за тебя");
+
+  if (source === "shake") {
+    showNotification("Shake PONT сработал: заказ собран");
+    updateShakeStatus("PONT почувствовал shake. Набор уже выбран ниже.");
+  } else {
+    showNotification("PONT собрал заказ за тебя");
+  }
+}
+
+function updateShakeStatus(text) {
+  if (elements.pontShakeStatus) {
+    elements.pontShakeStatus.textContent = text;
+  }
+}
+
+function handleShakeMotion(event) {
+  if (!shakePontEnabled) return;
+
+  const motion = event.accelerationIncludingGravity || event.acceleration;
+  if (!motion) return;
+
+  const current = {
+    x: motion.x || 0,
+    y: motion.y || 0,
+    z: motion.z || 0
+  };
+
+  if (!lastMotion) {
+    lastMotion = current;
+    return;
+  }
+
+  const delta = Math.abs(current.x - lastMotion.x) + Math.abs(current.y - lastMotion.y) + Math.abs(current.z - lastMotion.z);
+  lastMotion = current;
+
+  const now = Date.now();
+  if (delta > 24 && now - lastShakeTime > 1400) {
+    lastShakeTime = now;
+    pickPontRecommendation("shake");
+  }
+}
+
+function enableShakePont() {
+  if (!elements.pontShakeBtn) return;
+
+  if (!("DeviceMotionEvent" in window)) {
+    updateShakeStatus("На этом устройстве shake не поддерживается. Нажми “Выбрать без тряски”.");
+    showNotification("Shake не поддерживается на этом устройстве", true);
+    return;
+  }
+
+  const startListening = () => {
+    if (!shakePontEnabled) {
+      window.addEventListener("devicemotion", handleShakeMotion, true);
+    }
+
+    shakePontEnabled = true;
+    lastMotion = null;
+    elements.pontShakeBtn.textContent = "Тряси телефон";
+    elements.pontShakeBtn.classList.add("shake-active");
+    updateShakeStatus("Shake PONT включён. Встряхни телефон — и сайт соберёт заказ.");
+    showNotification("Shake PONT включён");
+  };
+
+  if (typeof DeviceMotionEvent.requestPermission === "function") {
+    DeviceMotionEvent.requestPermission()
+      .then((permission) => {
+        if (permission === "granted") {
+          startListening();
+        } else {
+          updateShakeStatus("Доступ к движению не разрешён. Можно выбрать набор кнопкой рядом.");
+          showNotification("Разрешение на shake не получено", true);
+        }
+      })
+      .catch(() => {
+        updateShakeStatus("Не получилось включить shake. Нажми “Выбрать без тряски”.");
+        showNotification("Shake не включился", true);
+      });
+    return;
+  }
+
+  startListening();
 }
 
 function addPontRecommendationToCart() {
@@ -862,7 +952,8 @@ function bindEvents() {
     elements.customerPhone.value = formatPhoneNumber(elements.customerPhone.value);
   });
 
-  elements.pontPickBtn?.addEventListener("click", pickPontRecommendation);
+  elements.pontShakeBtn?.addEventListener("click", enableShakePont);
+  elements.pontPickBtn?.addEventListener("click", () => pickPontRecommendation("button"));
   elements.pontChoiceAddBtn?.addEventListener("click", addPontRecommendationToCart);
 
   serOptionInputs.forEach((input) => input.addEventListener("change", updateOptionCards));
