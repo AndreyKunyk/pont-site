@@ -528,7 +528,26 @@
         </div>
         <p class="promo-message" id="promo-message"></p>
       </div>
+	<div class="customer-block">
+  <label class="promo-label">Данные для заказа</label>
 
+  <input
+    type="text"
+    id="customer-name"
+    class="customer-input"
+    placeholder="Ваше имя">
+
+  <input
+    type="tel"
+    id="customer-phone"
+    class="customer-input"
+    placeholder="Телефон для связи">
+
+  <textarea
+    id="customer-comment"
+    class="customer-input customer-textarea"
+    placeholder="Комментарий к заказу"></textarea>
+</div>
       <div class="cart-summary-list">
         <div class="summary-row">
           <span>Товаров</span>
@@ -609,8 +628,8 @@
       </div>
     </div>
   </div>
-
+  <div id="notification" class="notification"></div>
   <script src="script.js"></script>
-<div id="notification" class="notification"></div>
+
 </body>
 </html>

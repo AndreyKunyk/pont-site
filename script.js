@@ -40,6 +40,9 @@ const elements = {
   promoInput: document.getElementById("promo-input"),
   applyPromoBtn: document.getElementById("apply-promo-btn"),
   promoMessage: document.getElementById("promo-message"),
+  customerName: document.getElementById("customer-name"),
+  customerPhone: document.getElementById("customer-phone"),
+  customerComment: document.getElementById("customer-comment"),
 
   clearCartBtn: document.getElementById("clear-cart-btn"),
   sendOrderBtn: document.getElementById("send-order-btn"),
@@ -327,6 +330,17 @@ function resetCartAfterOrder() {
   if (elements.promoInput) {
     elements.promoInput.value = "";
   }
+  if (elements.customerName) {
+  elements.customerName.value = "";
+}
+
+if (elements.customerPhone) {
+  elements.customerPhone.value = "";
+}
+
+if (elements.customerComment) {
+  elements.customerComment.value = "";
+}  
 
   renderCart();
 }
@@ -338,6 +352,15 @@ async function sendOrder() {
     showNotification("Корзина пуста", true);
     return;
   }
+const customerName = elements.customerName ? elements.customerName.value.trim() : "";
+const customerPhone = elements.customerPhone ? elements.customerPhone.value.trim() : "";
+const customerComment = elements.customerComment ? elements.customerComment.value.trim() : "";
+
+if (!customerPhone) {
+  showNotification("Введите телефон для связи", true);
+  elements.customerPhone?.focus();
+  return;
+}
 
   const totals = calculateTotals();
 
@@ -354,7 +377,12 @@ async function sendOrder() {
         bonus: totals.bonus,
         discount: totals.discount,
         total: totals.finalTotal,
-        promo: appliedPromo
+        promo: appliedPromo,
+	customer: {
+  	  name: customerName || "Не указано",
+          phone: customerPhone,
+          comment: customerComment || ""
+}
       })
     });
 

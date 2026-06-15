@@ -597,6 +597,37 @@ section h2 {
   margin-bottom: 10px;
   text-align: left;
 }
+.customer-block {
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  padding: 12px;
+  border-radius: 16px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.customer-input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  background: #fff;
+  padding: 0 12px;
+  font-size: 13px;
+  outline: none;
+  margin-bottom: 8px;
+}
+
+.customer-input:focus {
+  border-color: #ff7e1b;
+}
+
+.customer-textarea {
+  height: 70px;
+  padding-top: 10px;
+  resize: none;
+  font-family: inherit;
+}
 
 .promo-label {
   display: block;
