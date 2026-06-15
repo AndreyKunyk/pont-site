@@ -25,7 +25,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css?v=19">
+  <link rel="stylesheet" href="style.css?v=20">
 </head>
 
 <body>
@@ -58,36 +58,6 @@
       <h2>PONT</h2>
       <p>Свежие ингредиенты. Авторские соусы. Без компромиссов по качеству.</p>
       <button class="btn" onclick="window.location.href='#shawarma'">Сделать заказ</button>
-    </div>
-  </section>
-
-  <section class="pont-picker-section shake-pont-section visible" id="pont-picker">
-    <div class="pont-picker-card shake-pont-card">
-      <div class="pont-picker-content">
-        <span class="pont-picker-mark">SHAKE PONT</span>
-        <h2>Потряси телефон — PONT соберёт заказ</h2>
-        <p>Нажми кнопку, встряхни телефон, и сайт сам выберет один из готовых наборов. Что выпало — то и можно сразу добавить в корзину.</p>
-      </div>
-
-      <div class="pont-picker-actions shake-pont-actions">
-        <button class="btn pont-picker-btn" id="pont-shake-btn" type="button">Включить Shake PONT</button>
-        <button class="btn pont-picker-btn pont-picker-secondary" id="pont-pick-btn" type="button">Выбрать без тряски</button>
-        <p class="pont-shake-status" id="pont-shake-status">На телефоне работает через встряхивание. На компьютере можно выбрать кнопкой.</p>
-      </div>
-
-      <div class="pont-choice" id="pont-choice" hidden>
-        <div class="pont-choice-head">
-          <span>Выбор PONT</span>
-          <strong id="pont-choice-title">Готовый набор</strong>
-          <p id="pont-choice-subtitle">Собрали заказ за тебя.</p>
-        </div>
-        <ul class="pont-choice-list" id="pont-choice-list"></ul>
-        <div class="pont-choice-total">
-          <span>Итого</span>
-          <strong id="pont-choice-total">0 ₽</strong>
-        </div>
-        <button class="btn pont-choice-add" id="pont-choice-add-btn" type="button">Добавить набор в заказ</button>
-      </div>
     </div>
   </section>
 
@@ -508,6 +478,37 @@
 </div>
   </section>
 
+
+  <section class="pont-picker-section shake-pont-section visible" id="pont-picker">
+    <div class="pont-picker-card shake-pont-card">
+      <div class="pont-picker-content">
+        <span class="pont-picker-mark">SHAKE PONT</span>
+        <h2>Потряси телефон — PONT соберёт заказ</h2>
+        <p>Нажми кнопку, встряхни телефон, и сайт сам выберет один из готовых наборов. Что выпало — то и можно сразу добавить в корзину.</p>
+      </div>
+
+      <div class="pont-picker-actions shake-pont-actions">
+        <button class="btn pont-picker-btn" id="pont-shake-btn" type="button">Включить Shake PONT</button>
+        <button class="btn pont-picker-btn pont-picker-secondary" id="pont-pick-btn" type="button">Выбрать без тряски</button>
+        <p class="pont-shake-status" id="pont-shake-status">На телефоне работает через встряхивание. На компьютере можно выбрать кнопкой.</p>
+      </div>
+
+      <div class="pont-choice" id="pont-choice" hidden>
+        <div class="pont-choice-head">
+          <span>Выбор PONT</span>
+          <strong id="pont-choice-title">Готовый набор</strong>
+          <p id="pont-choice-subtitle">Собрали заказ за тебя.</p>
+        </div>
+        <ul class="pont-choice-list" id="pont-choice-list"></ul>
+        <div class="pont-choice-total">
+          <span>Итого</span>
+          <strong id="pont-choice-total">0 ₽</strong>
+        </div>
+        <button class="btn pont-choice-add" id="pont-choice-add-btn" type="button">Добавить набор в заказ</button>
+      </div>
+    </div>
+  </section>
+
   <section id="advantages" class="visible">
     <h2>Почему PONT</h2>
     <div class="advantages">
@@ -748,7 +749,7 @@
     </div>
   </div>
   <div id="notification" class="notification"></div>
-  <script src="script.js?v=19"></script>
+  <script src="script.js?v=20"></script>
 
 </body>
 </html>
