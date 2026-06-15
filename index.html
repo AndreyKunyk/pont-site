@@ -25,7 +25,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css?v=12">
+  <link rel="stylesheet" href="style.css?v=11">
 </head>
 
 <body>
@@ -44,6 +44,15 @@
       </button>
     </nav>
   </header>
+
+  <div class="mobile-category-bar" aria-label="Категории меню">
+    <a href="#shawarma">Шаурма</a>
+    <a href="#combo">Комбо</a>
+    <a href="#snacks">Закуски</a>
+    <a href="#sauces">Соусы</a>
+    <a href="#drinks">Напитки</a>
+  </div>
+
 
   <section class="hero visible">
     <div class="hero-content">
@@ -499,54 +508,23 @@
     </p>
   </section>
 
-  <section id="contact" class="visible contact-section">
+  <section id="contact" class="visible">
     <h2>Контакты</h2>
+    <p>📍 Московская область, Мытищи, проспект Астрахова 14А</p>
+    <p>📞 +7 (916) 429-16-20</p>
+    <p>🕒 Ежедневно: 10:00–22:00</p>
 
-    <div class="contact-card">
-      <div class="contact-card-head">
-        <span class="contact-mark">PONT</span>
-        <h3>PONT в Мытищах</h3>
-        <p>Закажите на сайте и заберите свежий заказ без ожидания.</p>
-      </div>
+    <div class="contact-buttons">
+      <button class="btn telegram-btn" type="button" onclick="window.open('https://t.me/andreytoo','_blank')">
+        <i class="fab fa-telegram-plane"></i>
+        Заказать в Telegram
+      </button>
 
-      <div class="contact-info-list">
-        <div class="contact-info-item">
-          <span class="contact-icon">📍</span>
-          <div>
-            <strong>Адрес</strong>
-            <span>Московская область, Мытищи, проспект Астрахова 14А</span>
-          </div>
-        </div>
-
-        <div class="contact-info-item">
-          <span class="contact-icon">📞</span>
-          <div>
-            <strong>Телефон</strong>
-            <span>+7 (916) 429-16-20</span>
-          </div>
-        </div>
-
-        <div class="contact-info-item">
-          <span class="contact-icon">🕒</span>
-          <div>
-            <strong>Режим работы</strong>
-            <span>Ежедневно: 10:00–22:00</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="contact-buttons">
-        <button class="btn telegram-btn" type="button" onclick="window.open('https://t.me/andreytoo','_blank')">
-          <i class="fab fa-telegram-plane"></i>
-          Заказать в Telegram
-        </button>
-
-        <button class="btn map-btn"
-                type="button"
-                onclick="window.open('https://yandex.ru/maps/org/shaurmynet/241220365953?si=bnf9d038uh9z1yaw22u5wmm1fw','_blank')">
-          Открыть на карте
-        </button>
-      </div>
+      <button class="btn map-btn"
+              type="button"
+              onclick="window.open('https://yandex.ru/maps/org/shaurmynet/241220365953?si=bnf9d038uh9z1yaw22u5wmm1fw','_blank')">
+        Открыть на карте
+      </button>
     </div>
   </section>
 
@@ -699,7 +677,7 @@
     </div>
   </div>
   <div id="notification" class="notification"></div>
-  <script src="script.js?v=12"></script>
+  <script src="script.js?v=11"></script>
 
 </body>
 </html>
