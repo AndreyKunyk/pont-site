@@ -315,6 +315,22 @@ function clearCart() {
   showNotification("Корзина очищена");
 }
 
+function resetCartAfterOrder() {
+  cart.length = 0;
+  appliedPromo = "";
+
+  if (elements.promoMessage) {
+    elements.promoMessage.textContent = "";
+    elements.promoMessage.classList.remove("error");
+  }
+
+  if (elements.promoInput) {
+    elements.promoInput.value = "";
+  }
+
+  renderCart();
+}
+
 async function sendOrder() {
   if (!elements.sendOrderBtn) return;
 
@@ -345,17 +361,27 @@ async function sendOrder() {
     const data = await response.json();
 
     if (data.ok) {
-      showNotification("Заказ отправлен 🚀");
-    } else {
-      showNotification("Ошибка: " + (data.error || "неизвестная ошибка"), true);
-    }
+  showNotification("Заказ принят. Мы получили ваш заказ.");
+
+  elements.sendOrderBtn.innerHTML = `Заказ принят`;
+
+  resetCartAfterOrder();
+
+  setTimeout(() => {
+    closeCart();
+  }, 1500);
+} else {
+  showNotification("Ошибка: " + (data.error || "неизвестная ошибка"), true);
+}
   } catch (error) {
     console.error(error);
     showNotification("Ошибка соединения с сервером", true);
   } finally {
+  setTimeout(() => {
     elements.sendOrderBtn.disabled = false;
-    elements.sendOrderBtn.innerHTML = '<i class="fab fa-telegram-plane"></i> К оформлению заказа';
-  }
+    elements.sendOrderBtn.innerHTML = `<i class="fab fa-telegram-plane"></i> К оформлению заказа`;
+  }, 2000);
+}
 }
 
 function bindEvents() {
