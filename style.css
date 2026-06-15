@@ -136,7 +136,7 @@ nav a:hover {
    SECTIONS
 ======================= */
 section {
-  padding: 60px 10%;
+  padding: 52px 10%;
   text-align: center;
   opacity: 1;
   transform: translateY(0);
@@ -146,6 +146,19 @@ section {
 
 #shawarma {
   padding-top: 110px;
+}
+
+#advantages {
+  padding-bottom: 42px;
+}
+
+#about {
+  padding-top: 42px;
+  padding-bottom: 36px;
+}
+
+#contact {
+  padding-top: 38px;
 }
 
 section h2 {
@@ -326,22 +339,22 @@ section h2 {
 }
 
 .telegram-btn {
-  background: #0088cc;
+  background: #229ed9;
   display: inline-flex;
   align-items: center;
   gap: 10px;
 }
 
 .telegram-btn:hover {
-  background: #0099e6;
+  background: #168ac4;
 }
 
 .map-btn {
-  background: #222;
+  background: #2b2b2b;
 }
 
 .map-btn:hover {
-  background: #444;
+  background: #3a3a3a;
 }
 
 /* =======================
@@ -976,9 +989,10 @@ section h2 {
 footer {
   background: #fff;
   text-align: center;
-  padding: 40px;
+  padding: 34px 20px;
   border-top: 1px solid #eee;
   color: #666;
+  font-size: 14px;
 }
 
 .notification {
