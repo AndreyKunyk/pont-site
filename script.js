@@ -14,6 +14,29 @@ const SER_PRODUCT = {
   image: "ser.jpg"
 };
 
+const PONT_RECOMMENDATIONS = [
+  {
+    title: "Мясной PONT",
+    subtitle: "Сэр-Жермен, картофель фри и фирменный соус.",
+    items: [
+      { name: "Сэр-Жермен", price: 590, image: "ser.jpg" },
+      { name: "Картофель фри", price: 150, image: "kartoshka.jpg" },
+      { name: "Фирменный соус", price: 60, image: "sfirm.jpg" }
+    ]
+  },
+  {
+    title: "Хрустящий PONT",
+    subtitle: "Мон-Моди, сырные палочки и фирменный соус.",
+    items: [
+      { name: "Мон-Моди", price: 690, image: "mon.jpg" },
+      { name: "Сырные палочки", price: 200, image: "sirpal.jpg" },
+      { name: "Фирменный соус", price: 60, image: "sfirm.jpg" }
+    ]
+  }
+];
+
+let selectedPontRecommendation = null;
+
 function loadSavedCart() {
   try {
     const savedCart = localStorage.getItem(STORAGE_KEYS.cart) || localStorage.getItem(STORAGE_KEYS.oldCart) || "[]";
@@ -29,6 +52,7 @@ const cart = loadSavedCart();
 let appliedPromo = localStorage.getItem(STORAGE_KEYS.promo) || localStorage.getItem(STORAGE_KEYS.oldPromo) || "";
 
 const elements = {
+  logo: document.querySelector(".logo"),
   cartItems: document.getElementById("cart-items"),
   cartTotal: document.getElementById("cart-total"),
   cartBadge: document.getElementById("cart-badge"),
@@ -62,11 +86,26 @@ const elements = {
   serModalClose: document.getElementById("ser-modal-close"),
   serModalAddBtn: document.getElementById("ser-modal-add-btn"),
 
-  notification: document.getElementById("notification")
+  notification: document.getElementById("notification"),
+
+  mobileMiniCart: document.getElementById("mobile-mini-cart"),
+  mobileMiniCartText: document.getElementById("mobile-mini-cart-text"),
+  mobileMiniCartTotal: document.getElementById("mobile-mini-cart-total"),
+
+  pontPickBtn: document.getElementById("pont-pick-btn"),
+  pontChoice: document.getElementById("pont-choice"),
+  pontChoiceTitle: document.getElementById("pont-choice-title"),
+  pontChoiceSubtitle: document.getElementById("pont-choice-subtitle"),
+  pontChoiceList: document.getElementById("pont-choice-list"),
+  pontChoiceTotal: document.getElementById("pont-choice-total"),
+  pontChoiceAddBtn: document.getElementById("pont-choice-add-btn")
 };
 
 const serOptionCards = document.querySelectorAll(".option-card");
 const serOptionInputs = document.querySelectorAll('input[name="ser-addon"]');
+
+let logoTapCount = 0;
+let logoTapTimer = null;
 
 function showNotification(text, isError = false) {
   if (!elements.notification) return;
@@ -92,6 +131,7 @@ function openCart() {
   elements.cartDrawer.classList.add("active");
   elements.cartOverlay.classList.add("active");
   document.body.style.overflow = "hidden";
+  updateMobileMiniCart();
 }
 
 function closeCart() {
@@ -101,6 +141,7 @@ function closeCart() {
   elements.cartDrawer.classList.remove("success-mode");
   elements.cartOverlay.classList.remove("active");
   document.body.style.overflow = "";
+  updateMobileMiniCart();
 }
 
 function generateOrderId() {
@@ -266,6 +307,56 @@ function updateBadge() {
   elements.cartBadge.textContent = calculateTotals().itemsCount;
 }
 
+function updateMobileMiniCart() {
+  if (!elements.mobileMiniCart) return;
+
+  const totals = calculateTotals();
+  const cartIsOpen = elements.cartDrawer?.classList.contains("active");
+  const shouldShow = totals.itemsCount > 0 && !cartIsOpen;
+
+  elements.mobileMiniCart.classList.toggle("show", shouldShow);
+
+  if (elements.mobileMiniCartText) {
+    elements.mobileMiniCartText.textContent = `${totals.itemsCount} ${getProductWord(totals.itemsCount)}`;
+  }
+
+  if (elements.mobileMiniCartTotal) {
+    elements.mobileMiniCartTotal.textContent = `${totals.finalTotal} ₽`;
+  }
+}
+
+function getProductWord(count) {
+  const lastDigit = count % 10;
+  const lastTwo = count % 100;
+
+  if (lastDigit === 1 && lastTwo !== 11) return "товар";
+  if ([2, 3, 4].includes(lastDigit) && ![12, 13, 14].includes(lastTwo)) return "товара";
+  return "товаров";
+}
+
+function updateProductButtons() {
+  document.querySelectorAll(".add-to-cart").forEach((button) => {
+    const name = button.dataset.name;
+    const item = cart.find((cartItem) => cartItem.name === name);
+
+    if (!button.dataset.defaultLabel) {
+      button.dataset.defaultLabel = button.textContent.trim() || "Добавить в заказ";
+    }
+
+    if (item) {
+      button.classList.add("product-counter-btn");
+      button.innerHTML = `
+        <span class="card-counter-action" data-counter-action="minus">−</span>
+        <span class="card-counter-value">${item.quantity}</span>
+        <span class="card-counter-action" data-counter-action="plus">+</span>
+      `;
+    } else {
+      button.classList.remove("product-counter-btn");
+      button.textContent = button.dataset.defaultLabel;
+    }
+  });
+}
+
 function updatePromoUI() {
   if (!elements.applyPromoBtn || !elements.promoInput || !elements.promoMessage) return;
 
@@ -318,18 +409,30 @@ function renderCart() {
   }
 
   if (cart.length === 0) {
-    elements.cartItems.innerHTML = '<div class="empty-cart">Корзина пока пуста</div>';
+    elements.cartItems.innerHTML = `
+      <div class="empty-cart empty-cart-state">
+        <div class="empty-cart-icon"><i class="fas fa-shopping-bag"></i></div>
+        <h3>Корзина пока пуста</h3>
+        <p>Добавьте блюда из меню, и они появятся здесь.</p>
+        <button class="btn empty-cart-menu-btn" type="button">Перейти в меню</button>
+      </div>
+    `;
     elements.cartTotal.textContent = "0 ₽";
     if (elements.cartCount) elements.cartCount.textContent = "0";
     if (elements.cartBonus) elements.cartBonus.textContent = "0 ₽";
     if (elements.cartDiscount) elements.cartDiscount.textContent = "0 ₽";
     if (elements.discountRow) elements.discountRow.style.display = "none";
+    if (elements.cartDrawer) elements.cartDrawer.classList.add("cart-empty");
 
     updateBadge();
     updatePromoUI();
+    updateProductButtons();
+    updateMobileMiniCart();
     saveCart();
     return;
   }
+
+  if (elements.cartDrawer) elements.cartDrawer.classList.remove("cart-empty");
 
   cart.forEach((item) => elements.cartItems.appendChild(renderCartItem(item)));
 
@@ -348,6 +451,8 @@ function renderCart() {
 
   updateBadge();
   updatePromoUI();
+  updateProductButtons();
+  updateMobileMiniCart();
   saveCart();
 }
 
@@ -385,6 +490,103 @@ function changeItemQuantity(name, step) {
   }
 
   renderCart();
+}
+
+function getRecommendationTotal(recommendation) {
+  return recommendation.items.reduce((sum, item) => sum + item.price, 0);
+}
+
+function showPontRecommendation(recommendation) {
+  if (!recommendation || !elements.pontChoice) return;
+
+  selectedPontRecommendation = recommendation;
+
+  if (elements.pontChoiceTitle) {
+    elements.pontChoiceTitle.textContent = recommendation.title;
+  }
+
+  if (elements.pontChoiceSubtitle) {
+    elements.pontChoiceSubtitle.textContent = recommendation.subtitle;
+  }
+
+  if (elements.pontChoiceList) {
+    elements.pontChoiceList.innerHTML = recommendation.items
+      .map((item) => `<li><span>${item.name}</span><strong>${item.price} ₽</strong></li>`)
+      .join("");
+  }
+
+  if (elements.pontChoiceTotal) {
+    elements.pontChoiceTotal.textContent = `${getRecommendationTotal(recommendation)} ₽`;
+  }
+
+  elements.pontChoice.hidden = false;
+  elements.pontChoice.classList.remove("show");
+  setTimeout(() => elements.pontChoice.classList.add("show"), 10);
+}
+
+function pickPontRecommendation() {
+  const randomIndex = Math.floor(Math.random() * PONT_RECOMMENDATIONS.length);
+  const recommendation = PONT_RECOMMENDATIONS[randomIndex];
+
+  showPontRecommendation(recommendation);
+  showNotification("PONT собрал заказ за тебя");
+}
+
+function addPontRecommendationToCart() {
+  if (!selectedPontRecommendation) {
+    pickPontRecommendation();
+    return;
+  }
+
+  selectedPontRecommendation.items.forEach((product) => {
+    const existingItem = cart.find((item) => item.name === product.name);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+  });
+
+  renderCart();
+  pulseCartIndicator();
+  showNotification(`${selectedPontRecommendation.title} добавлен в заказ`);
+}
+
+function activateSecretPromo() {
+  appliedPromo = PROMO_CODE;
+
+  if (elements.promoInput) {
+    elements.promoInput.value = PROMO_CODE;
+  }
+
+  if (elements.promoMessage) {
+    elements.promoMessage.textContent = "Секретный промокод найден: скидка 20%";
+    elements.promoMessage.classList.remove("error");
+  }
+
+  if (elements.logo) {
+    elements.logo.classList.add("logo-secret");
+    setTimeout(() => elements.logo.classList.remove("logo-secret"), 800);
+  }
+
+  renderCart();
+  showNotification("Секрет PONT открыт: скидка 20% применена");
+}
+
+function handleLogoSecretClick() {
+  logoTapCount += 1;
+
+  clearTimeout(logoTapTimer);
+  logoTapTimer = setTimeout(() => {
+    logoTapCount = 0;
+  }, 1200);
+
+  if (logoTapCount >= 3) {
+    logoTapCount = 0;
+    clearTimeout(logoTapTimer);
+    activateSecretPromo();
+  }
 }
 
 function applyPromoCode() {
@@ -530,16 +732,75 @@ async function sendOrder() {
   }
 }
 
+function setupActiveCategoryNav() {
+  const tabs = Array.from(document.querySelectorAll(".menu-tab[href^='#']"));
+  const sections = tabs
+    .map((tab) => document.querySelector(tab.getAttribute("href")))
+    .filter(Boolean);
+
+  if (!tabs.length || !sections.length) return;
+
+  function setActiveTab(id) {
+    tabs.forEach((tab) => {
+      tab.classList.toggle("active", tab.getAttribute("href") === `#${id}`);
+    });
+  }
+
+  function updateActiveTab() {
+    let currentId = sections[0].id;
+    const triggerLine = window.innerHeight * 0.32;
+
+    sections.forEach((section) => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= triggerLine) {
+        currentId = section.id;
+      }
+    });
+
+    setActiveTab(currentId);
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const id = tab.getAttribute("href").slice(1);
+      setActiveTab(id);
+    });
+  });
+
+  window.addEventListener("scroll", updateActiveTab, { passive: true });
+  window.addEventListener("resize", updateActiveTab);
+  updateActiveTab();
+}
+
 function bindEvents() {
+  elements.logo?.addEventListener("click", handleLogoSecretClick);
+
   document.querySelectorAll(".add-to-cart").forEach((button) => {
-    button.addEventListener("click", () => {
+    if (!button.dataset.defaultLabel) {
+      button.dataset.defaultLabel = button.textContent.trim() || "Добавить в заказ";
+    }
+
+    button.addEventListener("click", (event) => {
       const name = button.dataset.name;
       const price = Number(button.dataset.price);
       const image = getButtonProductImage(button);
+      const counterAction = event.target.closest("[data-counter-action]")?.dataset.counterAction;
 
       if (!name || !price) {
         console.error("У кнопки товара не заполнены data-name или data-price", button);
         showNotification("Ошибка в карточке товара", true);
+        return;
+      }
+
+      if (counterAction === "plus") {
+        changeItemQuantity(name, 1);
+        pulseCartIndicator();
+        return;
+      }
+
+      if (counterAction === "minus") {
+        changeItemQuantity(name, -1);
+        pulseCartIndicator();
         return;
       }
 
@@ -548,6 +809,13 @@ function bindEvents() {
   });
 
   elements.cartItems?.addEventListener("click", (event) => {
+    const emptyMenuBtn = event.target.closest(".empty-cart-menu-btn");
+    if (emptyMenuBtn) {
+      closeCart();
+      document.getElementById("shawarma")?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
     const button = event.target.closest(".qty-btn");
     if (!button) return;
 
@@ -567,6 +835,8 @@ function bindEvents() {
   elements.cartToggle?.addEventListener("click", openCart);
   elements.cartClose?.addEventListener("click", closeCart);
   elements.cartOverlay?.addEventListener("click", closeCart);
+
+  elements.mobileMiniCart?.addEventListener("click", openCart);
 
   elements.serTriggerCard?.addEventListener("click", (event) => {
     if (event.target.closest(".open-ser-modal")) return;
@@ -592,9 +862,13 @@ function bindEvents() {
     elements.customerPhone.value = formatPhoneNumber(elements.customerPhone.value);
   });
 
+  elements.pontPickBtn?.addEventListener("click", pickPontRecommendation);
+  elements.pontChoiceAddBtn?.addEventListener("click", addPontRecommendationToCart);
+
   serOptionInputs.forEach((input) => input.addEventListener("change", updateOptionCards));
 }
 
 bindEvents();
+setupActiveCategoryNav();
 updateOptionCards();
 renderCart();

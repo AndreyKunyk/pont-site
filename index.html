@@ -25,7 +25,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="style.css?v=18">
 </head>
 
 <body>
@@ -58,6 +58,34 @@
       <h2>PONT</h2>
       <p>Свежие ингредиенты. Авторские соусы. Без компромиссов по качеству.</p>
       <button class="btn" onclick="window.location.href='#shawarma'">Сделать заказ</button>
+    </div>
+  </section>
+
+  <section class="pont-picker-section visible" id="pont-picker">
+    <div class="pont-picker-card">
+      <div class="pont-picker-content">
+        <span class="pont-picker-mark">PONT рекомендует</span>
+        <h2>Не листай — я выберу</h2>
+        <p>Не можешь определиться? Нажми кнопку, и сайт сам соберёт готовый набор.</p>
+      </div>
+
+      <div class="pont-picker-actions">
+        <button class="btn pont-picker-btn" id="pont-pick-btn" type="button">Подобрать заказ</button>
+      </div>
+
+      <div class="pont-choice" id="pont-choice" hidden>
+        <div class="pont-choice-head">
+          <span>Выбор PONT</span>
+          <strong id="pont-choice-title">Готовый набор</strong>
+          <p id="pont-choice-subtitle">Собрали заказ за тебя.</p>
+        </div>
+        <ul class="pont-choice-list" id="pont-choice-list"></ul>
+        <div class="pont-choice-total">
+          <span>Итого</span>
+          <strong id="pont-choice-total">0 ₽</strong>
+        </div>
+        <button class="btn pont-choice-add" id="pont-choice-add-btn" type="button">Добавить набор в заказ</button>
+      </div>
     </div>
   </section>
 
@@ -508,20 +536,6 @@
         Заказ можно быстро оформить прямо на сайте, а информация сразу поступает сотруднику заведения.
       </p>
 
-      <div class="about-points">
-        <div class="about-point">
-          <strong>Свежие ингредиенты</strong>
-          <span>Мясо, овощи и соусы каждый день.</span>
-        </div>
-        <div class="about-point">
-          <strong>Авторский вкус</strong>
-          <span>Фирменные сочетания и собственная подача.</span>
-        </div>
-        <div class="about-point">
-          <strong>Быстрый заказ</strong>
-          <span>Оформление прямо на сайте без лишних действий.</span>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -677,6 +691,13 @@
     </div>
   </aside>
 
+  <button class="mobile-mini-cart" id="mobile-mini-cart" type="button" aria-label="Открыть заказ">
+    <span id="mobile-mini-cart-text">0 товаров</span>
+    <strong id="mobile-mini-cart-total">0 ₽</strong>
+    <span class="mobile-mini-cart-action">Открыть заказ</span>
+  </button>
+
+
   <div class="product-modal-overlay" id="product-modal-overlay"></div>
 
   <div class="product-modal" id="ser-modal">
@@ -725,7 +746,7 @@
     </div>
   </div>
   <div id="notification" class="notification"></div>
-  <script src="script.js?v=14"></script>
+  <script src="script.js?v=18"></script>
 
 </body>
 </html>
