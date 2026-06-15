@@ -129,6 +129,30 @@ function hideOrderSuccess() {
   elements.cartDrawer.classList.remove("success-mode");
 }
 
+function pulseCartIndicator() {
+  if (!elements.cartToggle) return;
+  elements.cartToggle.classList.remove("cart-pulse");
+  void elements.cartToggle.offsetWidth;
+  elements.cartToggle.classList.add("cart-pulse");
+
+  setTimeout(() => {
+    elements.cartToggle.classList.remove("cart-pulse");
+  }, 700);
+}
+
+function animateProductAdded(triggerButton) {
+  const card = triggerButton ? triggerButton.closest(".item") : null;
+  if (!card) return;
+
+  card.classList.remove("product-added");
+  void card.offsetWidth;
+  card.classList.add("product-added");
+
+  setTimeout(() => {
+    card.classList.remove("product-added");
+  }, 650);
+}
+
 function getButtonProductImage(button) {
   const card = button.closest(".item, .product-card, .menu-card, .product-item, .card");
   const cardImage = card ? card.querySelector("img") : null;
@@ -283,7 +307,7 @@ function renderCart() {
   saveCart();
 }
 
-function addProduct(name, price, image) {
+function addProduct(name, price, image, triggerButton = null) {
   hideOrderSuccess();
 
   const existingItem = cart.find((item) => item.name === name);
@@ -295,13 +319,14 @@ function addProduct(name, price, image) {
   }
 
   renderCart();
-  openCart();
+  animateProductAdded(triggerButton);
+  pulseCartIndicator();
   showNotification("Добавлено в корзину");
 }
 
 function addSerProductWithOption() {
   const { extra, suffix } = getSelectedSerOptions();
-  addProduct(`${SER_PRODUCT.name}${suffix}`, SER_PRODUCT.price + extra, SER_PRODUCT.image);
+  addProduct(`${SER_PRODUCT.name}${suffix}`, SER_PRODUCT.price + extra, SER_PRODUCT.image, elements.serModalAddBtn);
   closeSerModal();
 }
 
@@ -472,7 +497,7 @@ function bindEvents() {
         return;
       }
 
-      addProduct(name, price, image);
+      addProduct(name, price, image, button);
     });
   });
 
