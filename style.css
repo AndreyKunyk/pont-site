@@ -2052,3 +2052,42 @@ footer p {
     font-size: 12px;
   }
 }
+
+
+/* ABOUT / CONTACT CLEANUP v21 */
+.about-section h2,
+.contact-section h2 {
+  margin-bottom: 20px;
+}
+
+.about-card {
+  padding: 28px 32px;
+}
+
+.about-card p {
+  margin: 0 auto;
+}
+
+.about-mark,
+.contact-mark {
+  display: none !important;
+}
+
+.contact-card-head {
+  margin-bottom: 22px;
+}
+
+.contact-card-head h3 {
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .about-card {
+    padding: 24px 22px;
+  }
+
+  .about-section h2,
+  .contact-section h2 {
+    margin-bottom: 16px;
+  }
+}
