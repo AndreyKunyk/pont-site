@@ -1074,6 +1074,15 @@ footer {
   font-size: 14px;
 }
 
+footer p {
+  margin: 4px 0;
+}
+
+.footer-author {
+  font-size: 13px;
+  color: #999;
+}
+
 .notification {
   position: fixed;
   top: 20px;

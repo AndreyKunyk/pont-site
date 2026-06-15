@@ -129,6 +129,50 @@ function hideOrderSuccess() {
   elements.cartDrawer.classList.remove("success-mode");
 }
 
+
+function formatPhoneNumber(value) {
+  let digits = value.replace(/\D/g, "");
+
+  if (digits.startsWith("8")) {
+    digits = "7" + digits.slice(1);
+  }
+
+  if (digits && !digits.startsWith("7")) {
+    digits = "7" + digits;
+  }
+
+  digits = digits.slice(0, 11);
+
+  const body = digits.startsWith("7") ? digits.slice(1) : digits;
+  let result = "+7";
+
+  if (body.length > 0) {
+    result += " (" + body.slice(0, 3);
+  }
+
+  if (body.length >= 3) {
+    result += ")";
+  }
+
+  if (body.length > 3) {
+    result += " " + body.slice(3, 6);
+  }
+
+  if (body.length > 6) {
+    result += "-" + body.slice(6, 8);
+  }
+
+  if (body.length > 8) {
+    result += "-" + body.slice(8, 10);
+  }
+
+  return result;
+}
+
+function getPhoneDigits(value) {
+  return value.replace(/\D/g, "");
+}
+
 function pulseCartIndicator() {
   if (!elements.cartToggle) return;
   elements.cartToggle.classList.remove("cart-pulse");
@@ -432,8 +476,10 @@ async function sendOrder() {
   const customerPhone = elements.customerPhone ? elements.customerPhone.value.trim() : "";
   const customerComment = elements.customerComment ? elements.customerComment.value.trim() : "";
 
-  if (!customerPhone) {
-    showNotification("Введите телефон для связи", true);
+  const customerPhoneDigits = getPhoneDigits(customerPhone);
+
+  if (!customerPhone || customerPhoneDigits.length < 11) {
+    showNotification("Введите телефон полностью", true);
     elements.customerPhone?.focus();
     return;
   }
@@ -535,6 +581,16 @@ function bindEvents() {
   elements.serModalClose?.addEventListener("click", closeSerModal);
   elements.serModalOverlay?.addEventListener("click", closeSerModal);
   elements.serModalAddBtn?.addEventListener("click", addSerProductWithOption);
+
+  elements.customerPhone?.addEventListener("focus", () => {
+    if (!elements.customerPhone.value.trim()) {
+      elements.customerPhone.value = "+7";
+    }
+  });
+
+  elements.customerPhone?.addEventListener("input", () => {
+    elements.customerPhone.value = formatPhoneNumber(elements.customerPhone.value);
+  });
 
   serOptionInputs.forEach((input) => input.addEventListener("change", updateOptionCards));
 }
