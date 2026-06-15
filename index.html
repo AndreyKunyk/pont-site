@@ -25,7 +25,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 
 <body>
@@ -599,6 +599,21 @@
         Очистить корзину
       </button>
     </div>
+    <div class="order-success" id="order-success">
+      <div class="order-success-card">
+        <div class="order-success-icon">
+          <i class="fas fa-check"></i>
+        </div>
+        <h3>Заказ принят</h3>
+        <p>Мы получили ваш заказ и скоро свяжемся с вами.</p>
+        <div class="order-number">
+          Номер заказа: <strong id="order-success-id">#P000000</strong>
+        </div>
+        <button class="btn checkout-btn" id="back-to-menu-btn" type="button">
+          Вернуться в меню
+        </button>
+      </div>
+    </div>
   </aside>
 
   <div class="product-modal-overlay" id="product-modal-overlay"></div>
@@ -649,7 +664,7 @@
     </div>
   </div>
   <div id="notification" class="notification"></div>
-  <script src="script.js?v=5"></script>
+  <script src="script.js?v=6"></script>
 
 </body>
 </html>

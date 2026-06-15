@@ -21,6 +21,7 @@ def send_order():
         discount = data.get("discount", 0)
         total = data.get("total", 0)
         promo = data.get("promo", "")
+        order_id = data.get("orderId", "")
 
         customer = data.get("customer", {})
         customer_name = customer.get("name", "Не указано")
@@ -36,7 +37,12 @@ def send_order():
         if not BOT_TOKEN or not CHAT_ID:
             return jsonify({"ok": False, "error": "Не настроены переменные Telegram"}), 500
 
-        message = "Новый заказ с сайта PONT\n\n"
+        message = "Новый заказ с сайта PONT\n"
+
+        if order_id:
+            message += f"Номер заказа: #{order_id}\n"
+
+        message += "\n"
         message += f"Клиент: {customer_name}\n"
         message += f"Телефон: {customer_phone}\n"
 

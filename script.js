@@ -46,6 +46,9 @@ const elements = {
 
   clearCartBtn: document.getElementById("clear-cart-btn"),
   sendOrderBtn: document.getElementById("send-order-btn"),
+  orderSuccess: document.getElementById("order-success"),
+  orderSuccessId: document.getElementById("order-success-id"),
+  backToMenuBtn: document.getElementById("back-to-menu-btn"),
 
   cartToggle: document.getElementById("cart-toggle"),
   cartDrawer: document.getElementById("cart-drawer"),
@@ -94,8 +97,36 @@ function openCart() {
 function closeCart() {
   if (!elements.cartDrawer || !elements.cartOverlay) return;
   elements.cartDrawer.classList.remove("active");
+  elements.cartDrawer.classList.remove("checkout-mode");
+  elements.cartDrawer.classList.remove("success-mode");
   elements.cartOverlay.classList.remove("active");
   document.body.style.overflow = "";
+}
+
+function generateOrderId() {
+  const now = new Date();
+  const year = String(now.getFullYear()).slice(-2);
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const random = Math.floor(100 + Math.random() * 900);
+
+  return `P${year}${month}${day}-${random}`;
+}
+
+function showOrderSuccess(orderId) {
+  if (!elements.cartDrawer) return;
+
+  if (elements.orderSuccessId) {
+    elements.orderSuccessId.textContent = `#${orderId}`;
+  }
+
+  elements.cartDrawer.classList.remove("checkout-mode");
+  elements.cartDrawer.classList.add("success-mode");
+}
+
+function hideOrderSuccess() {
+  if (!elements.cartDrawer) return;
+  elements.cartDrawer.classList.remove("success-mode");
 }
 
 function getButtonProductImage(button) {
@@ -253,6 +284,8 @@ function renderCart() {
 }
 
 function addProduct(name, price, image) {
+  hideOrderSuccess();
+
   const existingItem = cart.find((item) => item.name === name);
 
   if (existingItem) {
@@ -311,6 +344,7 @@ function clearCart() {
 
   if (elements.cartDrawer) {
     elements.cartDrawer.classList.remove("checkout-mode");
+    elements.cartDrawer.classList.remove("success-mode");
   }
 
   if (elements.promoMessage) {
@@ -369,16 +403,17 @@ async function sendOrder() {
     setTimeout(() => elements.customerPhone?.focus(), 100);
     return;
   }
-const customerName = elements.customerName ? elements.customerName.value.trim() : "";
-const customerPhone = elements.customerPhone ? elements.customerPhone.value.trim() : "";
-const customerComment = elements.customerComment ? elements.customerComment.value.trim() : "";
+  const customerName = elements.customerName ? elements.customerName.value.trim() : "";
+  const customerPhone = elements.customerPhone ? elements.customerPhone.value.trim() : "";
+  const customerComment = elements.customerComment ? elements.customerComment.value.trim() : "";
 
-if (!customerPhone) {
-  showNotification("Введите телефон для связи", true);
-  elements.customerPhone?.focus();
-  return;
-}
+  if (!customerPhone) {
+    showNotification("Введите телефон для связи", true);
+    elements.customerPhone?.focus();
+    return;
+  }
 
+  const orderId = generateOrderId();
   const totals = calculateTotals();
 
   try {
@@ -395,6 +430,7 @@ if (!customerPhone) {
         discount: totals.discount,
         total: totals.finalTotal,
         promo: appliedPromo,
+        orderId,
         customer: {
           name: customerName || "Не указано",
           phone: customerPhone,
@@ -406,27 +442,21 @@ if (!customerPhone) {
     const data = await response.json();
 
     if (data.ok) {
-  showNotification("Заказ принят. Мы получили ваш заказ.");
-
-  elements.sendOrderBtn.innerHTML = `Заказ принят`;
-
-  resetCartAfterOrder();
-
-  setTimeout(() => {
-    closeCart();
-  }, 1500);
-} else {
-  showNotification("Ошибка: " + (data.error || "неизвестная ошибка"), true);
-}
+      showNotification("Заказ принят. Мы получили ваш заказ.");
+      resetCartAfterOrder();
+      showOrderSuccess(orderId);
+    } else {
+      showNotification("Ошибка: " + (data.error || "неизвестная ошибка"), true);
+    }
   } catch (error) {
     console.error(error);
     showNotification("Ошибка соединения с сервером", true);
   } finally {
-  setTimeout(() => {
-    elements.sendOrderBtn.disabled = false;
-    elements.sendOrderBtn.innerHTML = `<i class="fab fa-telegram-plane"></i> К оформлению заказа`;
-  }, 2000);
-}
+    setTimeout(() => {
+      elements.sendOrderBtn.disabled = false;
+      elements.sendOrderBtn.innerHTML = `<i class="fab fa-telegram-plane"></i> К оформлению заказа`;
+    }, 2000);
+  }
 }
 
 function bindEvents() {
@@ -457,6 +487,11 @@ function bindEvents() {
   elements.applyPromoBtn?.addEventListener("click", applyPromoCode);
   elements.clearCartBtn?.addEventListener("click", clearCart);
   elements.sendOrderBtn?.addEventListener("click", sendOrder);
+  elements.backToMenuBtn?.addEventListener("click", () => {
+    hideOrderSuccess();
+    closeCart();
+    document.getElementById("shawarma")?.scrollIntoView({ behavior: "smooth" });
+  });
 
   elements.cartToggle?.addEventListener("click", openCart);
   elements.cartClose?.addEventListener("click", closeCart);
