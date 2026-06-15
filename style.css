@@ -374,6 +374,102 @@ section h2 {
   background: #3a3a3a;
 }
 
+
+.contact-section {
+  padding-top: 38px;
+  padding-bottom: 58px;
+}
+
+.contact-card {
+  max-width: 780px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.06);
+  text-align: left;
+}
+
+.contact-card-head {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.contact-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #fff3ea;
+  color: #ff7e1b;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.contact-card-head h3 {
+  font-size: 1.45em;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.contact-card-head p {
+  color: #666;
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 560px;
+}
+
+.contact-info-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.contact-info-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: #fafafa;
+  border: 1px solid #f2f2f2;
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.contact-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.contact-info-item strong {
+  display: block;
+  color: #222;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.contact-info-item span:last-child {
+  display: block;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.contact-card .contact-buttons {
+  margin-top: 0;
+}
+
 /* =======================
    FLOATING TELEGRAM
 ======================= */
@@ -1230,4 +1326,23 @@ footer p {
   .promo-btn {
     width: 100%;
   }
+
+  .contact-card {
+    padding: 20px;
+    border-radius: 24px;
+  }
+
+  .contact-info-list {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-card .contact-buttons {
+    flex-direction: column;
+  }
+
+  .contact-card .contact-buttons .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
 }
