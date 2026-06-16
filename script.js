@@ -282,6 +282,7 @@ function openSerModal() {
   elements.serModal.classList.add("active");
   elements.serModalOverlay.classList.add("active");
   document.body.style.overflow = "hidden";
+  document.body.classList.add("modal-open");
   updateOptionCards();
 }
 
@@ -290,6 +291,7 @@ function closeSerModal() {
   elements.serModal.classList.remove("active");
   elements.serModalOverlay.classList.remove("active");
   document.body.style.overflow = "";
+  document.body.classList.remove("modal-open");
 }
 
 function calculateTotals() {
@@ -541,7 +543,7 @@ function pickPontRecommendation(source = "button") {
 
   if (source === "shake") {
     showNotification("Shake PONT сработал: заказ собран");
-    updateShakeStatus("PONT почувствовал shake. Набор уже выбран ниже.");
+    updateShakeStatus("Набор выбран ниже.");
   } else {
     showNotification("PONT собрал заказ за тебя");
   }
@@ -584,7 +586,7 @@ function enableShakePont() {
   if (!elements.pontShakeBtn) return;
 
   if (!("DeviceMotionEvent" in window)) {
-    updateShakeStatus("На этом устройстве shake не поддерживается. Нажми “Выбрать без тряски”.");
+    updateShakeStatus("Shake не поддерживается. Нажми “Без тряски”.");
     showNotification("Shake не поддерживается на этом устройстве", true);
     return;
   }
@@ -596,9 +598,9 @@ function enableShakePont() {
 
     shakePontEnabled = true;
     lastMotion = null;
-    elements.pontShakeBtn.textContent = "Тряси телефон";
+    elements.pontShakeBtn.textContent = "Трясти телефон";
     elements.pontShakeBtn.classList.add("shake-active");
-    updateShakeStatus("Shake PONT включён. Встряхни телефон — и сайт соберёт заказ.");
+    updateShakeStatus("Shake включён. Встряхни телефон — PONT выберет набор.");
     showNotification("Shake PONT включён");
   };
 
@@ -608,12 +610,12 @@ function enableShakePont() {
         if (permission === "granted") {
           startListening();
         } else {
-          updateShakeStatus("Доступ к движению не разрешён. Можно выбрать набор кнопкой рядом.");
+          updateShakeStatus("Доступ не разрешён. Выбери набор кнопкой рядом.");
           showNotification("Разрешение на shake не получено", true);
         }
       })
       .catch(() => {
-        updateShakeStatus("Не получилось включить shake. Нажми “Выбрать без тряски”.");
+        updateShakeStatus("Не получилось включить shake. Нажми “Без тряски”.");
         showNotification("Shake не включился", true);
       });
     return;
@@ -823,7 +825,7 @@ async function sendOrder() {
 }
 
 function setupActiveCategoryNav() {
-  const tabs = Array.from(document.querySelectorAll(".menu-tab[href^='#']"));
+  const tabs = Array.from(document.querySelectorAll(".menu-tab[href^='#'], .mobile-category-bar a[href^='#']"));
   const sections = tabs
     .map((tab) => document.querySelector(tab.getAttribute("href")))
     .filter(Boolean);

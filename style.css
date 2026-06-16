@@ -2091,3 +2091,546 @@ footer p {
     margin-bottom: 16px;
   }
 }
+
+
+/* =======================
+   MOBILE SER MODAL + UX FIX v22
+======================= */
+@media (max-width: 700px) {
+  body.modal-open {
+    overflow: hidden;
+  }
+
+  .product-modal-overlay.active {
+    background: rgba(0, 0, 0, 0.52);
+  }
+
+  .product-modal {
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-height: calc(100dvh - 72px);
+    border-radius: 26px 26px 0 0;
+    transform: translateY(110%);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 -18px 50px rgba(0, 0, 0, 0.24);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .product-modal.active {
+    transform: translateY(0);
+  }
+
+  .product-modal-close {
+    top: 10px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    font-size: 24px;
+    z-index: 3;
+  }
+
+  .product-modal-content {
+    display: block;
+    padding: 18px 18px calc(18px + env(safe-area-inset-bottom));
+  }
+
+  .product-modal-image-wrap {
+    margin: 4px auto 12px;
+  }
+
+  .product-modal-image {
+    display: block;
+    width: 100%;
+    max-width: 230px;
+    height: 170px;
+    margin: 0 auto;
+    object-fit: cover;
+    border-radius: 20px;
+  }
+
+  .product-modal-info h2 {
+    font-size: 1.55em;
+    margin-bottom: 8px;
+    padding-right: 44px;
+  }
+
+  .product-modal-desc {
+    font-size: 0.94em;
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+
+  .product-modal-base-price {
+    font-size: 0.98em;
+    margin-bottom: 16px;
+  }
+
+  .product-modal-info h3 {
+    font-size: 1.12em;
+    margin-bottom: 10px;
+  }
+
+  .option-list {
+    grid-template-columns: 1fr;
+    gap: 9px;
+    margin-bottom: 12px;
+  }
+
+  .option-card {
+    min-height: 0;
+    border-radius: 16px;
+    padding: 13px 14px;
+    gap: 4px;
+  }
+
+  .option-title {
+    font-size: 0.98em;
+  }
+
+  .option-price {
+    font-size: 0.94em;
+  }
+
+  .modal-add-btn {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    min-height: 48px;
+    margin-top: 10px;
+    border-radius: 18px;
+    box-shadow: 0 10px 26px rgba(255, 126, 27, 0.28);
+  }
+
+  .product-modal.active ~ .notification,
+  .product-modal-overlay.active ~ .notification {
+    bottom: 22px;
+  }
+
+  .product-modal-overlay.active ~ .mobile-mini-cart,
+  .product-modal.active ~ .mobile-mini-cart {
+    display: none !important;
+  }
+
+  .mobile-mini-cart {
+    left: 12px;
+    right: 12px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
+    min-height: 52px;
+    border-radius: 18px;
+    grid-template-columns: auto auto 1fr;
+    padding: 9px 12px;
+  }
+
+  .mobile-mini-cart-action {
+    padding: 8px 11px;
+  }
+
+  .pont-picker-section {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  .pont-picker-card {
+    padding: 18px 16px;
+    border-radius: 22px;
+  }
+
+  .pont-picker-mark {
+    font-size: 0.74em;
+  }
+
+  .pont-picker-content h2 {
+    font-size: 1.34em;
+    line-height: 1.18;
+    margin-bottom: 10px;
+  }
+
+  .pont-picker-content p {
+    font-size: 0.93em;
+    line-height: 1.5;
+  }
+
+  .pont-picker-actions .btn,
+  .shake-pont-actions .btn {
+    min-height: 44px;
+    font-size: 0.95em;
+  }
+}
+
+@media (max-width: 390px) {
+  .product-modal {
+    max-height: calc(100dvh - 54px);
+  }
+
+  .product-modal-image {
+    max-width: 190px;
+    height: 135px;
+  }
+
+  .product-modal-desc {
+    font-size: 0.9em;
+  }
+}
+
+
+/* =======================
+   MOBILE TOP DESIGN POLISH v23
+======================= */
+@media (max-width: 700px) {
+  body {
+    padding-bottom: calc(74px + env(safe-area-inset-bottom));
+  }
+
+  header {
+    padding: 9px 5% 8px !important;
+    gap: 7px !important;
+  }
+
+  .logo {
+    font-size: 1.95em !important;
+    letter-spacing: 5px;
+  }
+
+  nav {
+    gap: 12px !important;
+    font-size: 14px !important;
+  }
+
+  nav a {
+    font-size: 14px !important;
+  }
+
+  .cart-toggle {
+    padding: 7px 10px !important;
+    font-size: 13px !important;
+  }
+
+  .cart-badge {
+    min-width: 20px !important;
+    height: 20px !important;
+    font-size: 11px !important;
+  }
+
+  .mobile-category-bar {
+    padding: 6px 5% !important;
+    gap: 7px !important;
+    background: rgba(250, 250, 250, 0.96) !important;
+  }
+
+  .mobile-category-bar a,
+  .mobile-category-bar a:first-child {
+    padding: 7px 12px !important;
+    border-radius: 999px !important;
+    font-size: 12.5px !important;
+    background: #fff !important;
+    color: #222 !important;
+    border-color: #eeeeee !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.045) !important;
+  }
+
+  .mobile-category-bar a.active {
+    background: #ff7e1b !important;
+    color: #fff !important;
+    border-color: #ff7e1b !important;
+    box-shadow: 0 8px 18px rgba(255, 126, 27, 0.22) !important;
+  }
+
+  .hero {
+    min-height: 58dvh !important;
+  }
+
+  .hero-content {
+    padding: 0 8%;
+  }
+
+  .hero h2 {
+    font-size: 1.65em !important;
+    margin-bottom: 10px;
+  }
+
+  .hero p {
+    font-size: 0.95em !important;
+    line-height: 1.35;
+    max-width: 320px;
+    margin: 0 auto 16px;
+  }
+
+  .hero .btn {
+    min-height: 40px;
+    padding: 10px 22px;
+    font-size: 0.92em;
+  }
+
+  section {
+    padding: 28px 5% !important;
+    scroll-margin-top: 50px !important;
+  }
+
+  #shawarma {
+    padding-top: 24px !important;
+  }
+
+  section h2 {
+    font-size: 1.42em !important;
+    margin-bottom: 14px !important;
+  }
+
+  .menu,
+  #sauces .menu {
+    gap: 14px !important;
+  }
+
+  .item {
+    border-radius: 20px !important;
+    box-shadow: 0 7px 22px rgba(0, 0, 0, 0.07) !important;
+  }
+
+  .item img {
+    height: 152px !important;
+  }
+
+  #combo .item img {
+    height: 165px !important;
+    object-fit: contain !important;
+    padding: 10px 10px 0;
+    background: #fff;
+  }
+
+  #sauces .item img,
+  #drinks .item img {
+    height: 126px !important;
+    object-fit: contain !important;
+    padding: 12px !important;
+  }
+
+  .item h3 {
+    margin: 10px 0 5px !important;
+    padding: 0 14px;
+    font-size: 1.02em !important;
+    line-height: 1.18;
+  }
+
+  .item p {
+    padding: 0 14px !important;
+    margin-bottom: 10px !important;
+    font-size: 0.82em !important;
+    line-height: 1.35 !important;
+    color: #626262 !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-actions {
+    padding: 0 14px 14px !important;
+    gap: 8px !important;
+  }
+
+  .price {
+    padding: 6px 15px !important;
+    font-size: 0.92em !important;
+    border-radius: 18px !important;
+  }
+
+  .add-to-cart,
+  .open-ser-modal {
+    min-height: 40px !important;
+    height: 40px !important;
+    padding: 8px 16px !important;
+    font-size: 0.92em !important;
+    border-radius: 18px !important;
+  }
+
+  .product-counter-btn {
+    max-width: none !important;
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 7px 12px !important;
+  }
+
+  .card-counter-action {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 18px !important;
+  }
+
+  .card-counter-value {
+    font-size: 0.98em !important;
+  }
+
+  .mobile-mini-cart {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(9px + env(safe-area-inset-bottom)) !important;
+    min-height: 46px !important;
+    padding: 7px 10px !important;
+    gap: 8px !important;
+    border-radius: 17px !important;
+    font-size: 12.5px !important;
+  }
+
+  .mobile-mini-cart strong {
+    font-size: 15px !important;
+  }
+
+  .mobile-mini-cart-action {
+    padding: 7px 10px !important;
+    font-size: 12.5px !important;
+  }
+
+  body.modal-open .mobile-mini-cart,
+  body.modal-open .floating-telegram {
+    display: none !important;
+  }
+
+  .pont-picker-section {
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
+  }
+
+  .pont-picker-card,
+  .shake-pont-card {
+    padding: 16px 15px !important;
+    border-radius: 22px !important;
+    gap: 12px !important;
+  }
+
+  .pont-picker-mark {
+    font-size: 0.68em !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .pont-picker-content h2 {
+    font-size: 1.22em !important;
+    line-height: 1.16 !important;
+    margin-bottom: 8px !important;
+  }
+
+  .pont-picker-content p {
+    font-size: 0.86em !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .pont-picker-actions,
+  .shake-pont-actions {
+    gap: 8px !important;
+  }
+
+  .pont-picker-actions .btn,
+  .shake-pont-actions .btn {
+    min-height: 40px !important;
+    height: 40px !important;
+    font-size: 0.88em !important;
+    border-radius: 18px !important;
+  }
+
+  .pont-shake-status {
+    font-size: 11.5px !important;
+    line-height: 1.35 !important;
+    margin-top: 4px !important;
+  }
+
+  .pont-choice {
+    padding: 12px !important;
+    border-radius: 18px !important;
+  }
+
+  .pont-choice-head strong {
+    font-size: 1em !important;
+  }
+
+  .pont-choice-list li,
+  .pont-choice-total {
+    font-size: 0.9em !important;
+  }
+
+  .about-card,
+  .contact-card {
+    border-radius: 22px !important;
+    padding: 20px 18px !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .product-modal {
+    max-height: calc(100dvh - 42px) !important;
+    border-radius: 24px 24px 0 0 !important;
+  }
+
+  .product-modal-content {
+    padding: 14px 15px calc(14px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .product-modal-close {
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 22px !important;
+  }
+
+  .product-modal-image {
+    max-width: 170px !important;
+    height: 118px !important;
+    border-radius: 17px !important;
+  }
+
+  .product-modal-info h2 {
+    font-size: 1.3em !important;
+    margin-bottom: 6px !important;
+  }
+
+  .product-modal-desc {
+    font-size: 0.86em !important;
+    line-height: 1.35 !important;
+    margin-bottom: 7px !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .product-modal-base-price {
+    font-size: 0.9em !important;
+    margin-bottom: 10px !important;
+  }
+
+  .product-modal-info h3 {
+    font-size: 1em !important;
+    margin-bottom: 8px !important;
+  }
+
+  .option-list {
+    gap: 7px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .option-card {
+    padding: 10px 12px !important;
+    border-radius: 15px !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: center !important;
+  }
+
+  .option-title {
+    font-size: 0.9em !important;
+  }
+
+  .option-price {
+    font-size: 0.86em !important;
+  }
+
+  .modal-add-btn {
+    min-height: 44px !important;
+    height: 44px !important;
+    border-radius: 17px !important;
+    margin-top: 8px !important;
+  }
+}
