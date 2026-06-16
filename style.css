@@ -2734,3 +2734,38 @@ footer p {
     height: 205px !important;
   }
 }
+
+
+/* =======================
+   MOBILE PRODUCT IMAGE SIZE FIX v25
+   Только 2 правки: крупнее комбо и крупнее напитки.
+======================= */
+@media (max-width: 700px) {
+  #combo .item img {
+    height: 285px !important;
+    padding: 6px 6px 0 !important;
+    object-fit: contain !important;
+    transform: scale(1.08) !important;
+    transform-origin: center center !important;
+  }
+
+  #drinks .item img {
+    height: 245px !important;
+    padding: 2px !important;
+    object-fit: contain !important;
+    transform: scale(1.62) !important;
+    transform-origin: center center !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #combo .item img {
+    height: 265px !important;
+    transform: scale(1.08) !important;
+  }
+
+  #drinks .item img {
+    height: 232px !important;
+    transform: scale(1.56) !important;
+  }
+}
