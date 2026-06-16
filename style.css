@@ -2803,3 +2803,40 @@ footer p {
     margin-bottom: 52px !important;
   }
 }
+
+/* =======================
+   MOBILE DRINK WHITE SPACE FIX v27
+   Убираем лишнее белое пространство под напитками,
+   не трогая остальные блоки версии v26.
+======================= */
+@media (max-width: 700px) {
+  #drinks .item {
+    overflow: hidden !important;
+  }
+
+  #drinks .item img {
+    height: 250px !important;
+    padding: 0 4px !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    transform: scale(1.36) !important;
+    transform-origin: center center !important;
+    margin-top: -8px !important;
+    margin-bottom: -28px !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+
+  #drinks .item h3 {
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 390px) {
+  #drinks .item img {
+    height: 235px !important;
+    transform: scale(1.32) !important;
+    margin-top: -8px !important;
+    margin-bottom: -26px !important;
+  }
+}
