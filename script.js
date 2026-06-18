@@ -2,7 +2,8 @@ const STORAGE_KEYS = {
   cart: "pontCart",
   oldCart: "kunikCart",
   promo: "pontPromo",
-  oldPromo: "kunikPromo"
+  oldPromo: "kunikPromo",
+  theme: "pontTheme"
 };
 
 const PROMO_CODE = "OVCHINNIKOV";
@@ -75,6 +76,8 @@ const elements = {
   backToMenuBtn: document.getElementById("back-to-menu-btn"),
 
   cartToggle: document.getElementById("cart-toggle"),
+  themeToggle: document.getElementById("theme-toggle"),
+  themeColorMeta: document.getElementById("theme-color-meta"),
   cartDrawer: document.getElementById("cart-drawer"),
   cartOverlay: document.getElementById("cart-overlay"),
   cartClose: document.getElementById("cart-close"),
@@ -121,6 +124,53 @@ function showNotification(text, isError = false) {
 
   setTimeout(() => elements.notification.classList.add("show"), 10);
   setTimeout(() => elements.notification.classList.remove("show"), 3000);
+}
+
+function getSavedTheme() {
+  try {
+    const savedTheme = localStorage.getItem(STORAGE_KEYS.theme);
+    return savedTheme === "light" ? "light" : "dark";
+  } catch (error) {
+    return "dark";
+  }
+}
+
+function applyTheme(theme, shouldSave = true) {
+  const normalizedTheme = theme === "light" ? "light" : "dark";
+  const isDark = normalizedTheme === "dark";
+
+  document.documentElement.setAttribute("data-theme", normalizedTheme);
+
+  if (elements.themeColorMeta) {
+    elements.themeColorMeta.setAttribute("content", isDark ? "#08090d" : "#f9f9f9");
+  }
+
+  if (elements.themeToggle) {
+    elements.themeToggle.setAttribute("aria-pressed", String(isDark));
+    elements.themeToggle.innerHTML = `
+      <i class="fas ${isDark ? "fa-moon" : "fa-sun"}"></i>
+      <span>${isDark ? "Тёмная" : "Светлая"}</span>
+    `;
+  }
+
+  if (shouldSave) {
+    try {
+      localStorage.setItem(STORAGE_KEYS.theme, normalizedTheme);
+    } catch (error) {
+      console.warn("Не удалось сохранить тему", error);
+    }
+  }
+}
+
+function toggleTheme() {
+  const currentTheme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+  const nextTheme = currentTheme === "dark" ? "light" : "dark";
+  applyTheme(nextTheme);
+  showNotification(nextTheme === "dark" ? "Включена тёмная тема" : "Включена светлая тема");
+}
+
+function initTheme() {
+  applyTheme(getSavedTheme(), false);
 }
 
 function saveCart() {
@@ -925,6 +975,7 @@ function bindEvents() {
   });
 
   elements.cartToggle?.addEventListener("click", openCart);
+  elements.themeToggle?.addEventListener("click", toggleTheme);
   elements.cartClose?.addEventListener("click", closeCart);
   elements.cartOverlay?.addEventListener("click", closeCart);
 
@@ -961,6 +1012,7 @@ function bindEvents() {
   serOptionInputs.forEach((input) => input.addEventListener("change", updateOptionCards));
 }
 
+initTheme();
 bindEvents();
 setupActiveCategoryNav();
 updateOptionCards();

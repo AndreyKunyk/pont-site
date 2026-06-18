@@ -25,7 +25,18 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css?v=27">
+  <meta name="theme-color" content="#08090d" id="theme-color-meta">
+  <script>
+    (function () {
+      try {
+        var savedTheme = localStorage.getItem("pontTheme");
+        document.documentElement.setAttribute("data-theme", savedTheme === "light" ? "light" : "dark");
+      } catch (error) {
+        document.documentElement.setAttribute("data-theme", "dark");
+      }
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css?v=39">
 </head>
 
 <body>
@@ -41,6 +52,11 @@
         <i class="fas fa-shopping-bag"></i>
         <span>Корзина</span>
         <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Переключить тему" aria-pressed="true">
+        <i class="fas fa-moon"></i>
+        <span>Тёмная</span>
       </button>
     </nav>
   </header>
@@ -747,7 +763,7 @@
     </div>
   </div>
   <div id="notification" class="notification"></div>
-  <script src="script.js?v=27"></script>
+  <script src="script.js?v=28"></script>
 
 </body>
 </html>

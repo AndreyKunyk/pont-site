@@ -2840,3 +2840,1408 @@ footer p {
     margin-bottom: -26px !important;
   }
 }
+
+
+/* =======================
+   THEME TOGGLE + PREMIUM DARK THEME v28
+======================= */
+.theme-toggle {
+  border: 1px solid rgba(255, 126, 27, 0.22);
+  background: #fff;
+  color: #222;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 0.95em;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.theme-toggle:hover {
+  transform: translateY(-1px);
+  border-color: #ff7e1b;
+  color: #ff7e1b;
+  box-shadow: 0 8px 22px rgba(255, 126, 27, 0.16);
+}
+
+.theme-toggle i {
+  font-size: 0.95em;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --pont-bg: #08090d;
+  --pont-bg-soft: #10131b;
+  --pont-bg-card: rgba(18, 20, 28, 0.92);
+  --pont-bg-elevated: rgba(23, 26, 36, 0.96);
+  --pont-border: rgba(255, 255, 255, 0.10);
+  --pont-border-strong: rgba(255, 126, 27, 0.30);
+  --pont-text: #f6f3ee;
+  --pont-text-muted: #b6ad9f;
+  --pont-accent: #ff7e1b;
+  --pont-accent-soft: rgba(255, 126, 27, 0.14);
+  --pont-pink: #ff4fa3;
+  --pont-shadow: rgba(0, 0, 0, 0.48);
+}
+
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255, 79, 163, 0.12), transparent 34%),
+    radial-gradient(circle at 88% 8%, rgba(255, 126, 27, 0.18), transparent 31%),
+    linear-gradient(180deg, #08090d 0%, #0c0d12 42%, #08090d 100%) !important;
+  color: var(--pont-text) !important;
+}
+
+html[data-theme="dark"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.75), transparent 78%);
+}
+
+html[data-theme="dark"] header {
+  background: rgba(8, 9, 13, 0.78) !important;
+  border-bottom: 1px solid var(--pont-border) !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22) !important;
+}
+
+html[data-theme="dark"] .logo,
+html[data-theme="dark"] .receipt-brand {
+  color: #fff !important;
+  text-shadow: 0 0 18px rgba(255, 79, 163, 0.42), 0 0 26px rgba(255, 126, 27, 0.20) !important;
+}
+
+html[data-theme="dark"] nav a {
+  color: rgba(246, 243, 238, 0.82) !important;
+}
+
+html[data-theme="dark"] nav a:hover {
+  color: var(--pont-accent) !important;
+}
+
+html[data-theme="dark"] .theme-toggle,
+html[data-theme="dark"] .cart-toggle,
+html[data-theme="dark"] .menu-tab,
+html[data-theme="dark"] .mobile-category-bar a {
+  background: rgba(255, 255, 255, 0.055) !important;
+  color: var(--pont-text) !important;
+  border: 1px solid var(--pont-border) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 10px 28px rgba(0,0,0,0.24) !important;
+  backdrop-filter: blur(12px);
+}
+
+html[data-theme="dark"] .theme-toggle:hover,
+html[data-theme="dark"] .cart-toggle:hover,
+html[data-theme="dark"] .menu-tab:hover,
+html[data-theme="dark"] .mobile-category-bar a:hover {
+  border-color: var(--pont-border-strong) !important;
+  color: var(--pont-accent) !important;
+  background: rgba(255, 126, 27, 0.12) !important;
+}
+
+html[data-theme="dark"] .theme-toggle[aria-pressed="true"] {
+  border-color: var(--pont-border-strong) !important;
+  background: linear-gradient(135deg, rgba(255, 126, 27, 0.18), rgba(255, 79, 163, 0.10)) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .cart-badge,
+html[data-theme="dark"] .menu-tab.active,
+html[data-theme="dark"] .mobile-category-bar a.active {
+  background: linear-gradient(135deg, #ff7e1b, #ff4fa3) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+html[data-theme="dark"] .hero::after {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255,126,27,0.13), transparent 28%),
+    linear-gradient(90deg, rgba(0,0,0,0.88), rgba(8,9,13,0.52), rgba(0,0,0,0.88)) !important;
+}
+
+html[data-theme="dark"] .hero-content {
+  background: linear-gradient(135deg, rgba(8, 9, 13, 0.34), rgba(8, 9, 13, 0.10));
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 30px;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.28);
+  backdrop-filter: blur(4px);
+}
+
+html[data-theme="dark"] .hero h2 {
+  color: #fff !important;
+  letter-spacing: 0.08em;
+  text-shadow: 0 0 30px rgba(255, 126, 27, 0.35) !important;
+}
+
+html[data-theme="dark"] .hero p {
+  color: rgba(255,255,255,0.88) !important;
+}
+
+html[data-theme="dark"] section h2,
+html[data-theme="dark"] .item h3,
+html[data-theme="dark"] .adv-card h3,
+html[data-theme="dark"] .about-card h2,
+html[data-theme="dark"] .contact-card-head h3,
+html[data-theme="dark"] .cart-drawer-header h2,
+html[data-theme="dark"] .product-modal-info h2,
+html[data-theme="dark"] .product-modal-info h3,
+html[data-theme="dark"] .order-success-card h3,
+html[data-theme="dark"] .empty-cart-state h3,
+html[data-theme="dark"] .pont-picker-content h2,
+html[data-theme="dark"] .pont-choice-head strong {
+  color: var(--pont-text) !important;
+}
+
+html[data-theme="dark"] .item,
+html[data-theme="dark"] .adv-card,
+html[data-theme="dark"] .about-card,
+html[data-theme="dark"] .contact-card,
+html[data-theme="dark"] .pont-picker-card,
+html[data-theme="dark"] .shake-pont-card,
+html[data-theme="dark"] .cart-row,
+html[data-theme="dark"] .promo-block,
+html[data-theme="dark"] .customer-block,
+html[data-theme="dark"] .order-success-card,
+html[data-theme="dark"] .product-modal,
+html[data-theme="dark"] .pont-choice,
+html[data-theme="dark"] .option-card,
+html[data-theme="dark"] .empty-cart-state {
+  background: linear-gradient(180deg, rgba(24, 27, 37, 0.94), rgba(13, 15, 21, 0.96)) !important;
+  border: 1px solid var(--pont-border) !important;
+  box-shadow: 0 18px 46px var(--pont-shadow), inset 0 1px 0 rgba(255,255,255,0.045) !important;
+}
+
+html[data-theme="dark"] .item:hover,
+html[data-theme="dark"] .adv-card:hover {
+  box-shadow: 0 24px 56px rgba(0,0,0,0.56), 0 0 0 1px rgba(255,126,27,0.18) !important;
+}
+
+html[data-theme="dark"] .item img,
+html[data-theme="dark"] #combo .item img,
+html[data-theme="dark"] #sauces .item img,
+html[data-theme="dark"] #drinks .item img,
+html[data-theme="dark"] .product-modal-image,
+html[data-theme="dark"] .cart-item-thumb {
+  background: radial-gradient(circle at center, rgba(255,255,255,0.08), rgba(255,255,255,0.02)) !important;
+}
+
+html[data-theme="dark"] .item p,
+html[data-theme="dark"] .adv-card p,
+html[data-theme="dark"] .about-card p,
+html[data-theme="dark"] .about-point span,
+html[data-theme="dark"] .contact-card-head p,
+html[data-theme="dark"] .contact-info-item span:last-child,
+html[data-theme="dark"] #contact p,
+html[data-theme="dark"] .cart-item-price,
+html[data-theme="dark"] .empty-cart,
+html[data-theme="dark"] .empty-cart-state p,
+html[data-theme="dark"] .product-modal-desc,
+html[data-theme="dark"] .product-modal-base-price,
+html[data-theme="dark"] .order-success-card p,
+html[data-theme="dark"] .receipt-note,
+html[data-theme="dark"] .pont-picker-content p,
+html[data-theme="dark"] .pont-shake-status,
+html[data-theme="dark"] .pont-choice-list li {
+  color: var(--pont-text-muted) !important;
+}
+
+html[data-theme="dark"] .about-point,
+html[data-theme="dark"] .contact-info-item,
+html[data-theme="dark"] .cart-controls,
+html[data-theme="dark"] .cart-summary-list,
+html[data-theme="dark"] .empty-cart-icon,
+html[data-theme="dark"] .product-modal-image-wrap {
+  background: rgba(255, 255, 255, 0.045) !important;
+  border-color: var(--pont-border) !important;
+}
+
+html[data-theme="dark"] .about-point strong,
+html[data-theme="dark"] .contact-info-item strong,
+html[data-theme="dark"] .cart-item-name,
+html[data-theme="dark"] .cart-line-total,
+html[data-theme="dark"] .qty-value,
+html[data-theme="dark"] .summary-row strong,
+html[data-theme="dark"] .summary-row span,
+html[data-theme="dark"] .option-title,
+html[data-theme="dark"] .pont-choice-total {
+  color: var(--pont-text) !important;
+}
+
+html[data-theme="dark"] .price,
+html[data-theme="dark"] .about-mark,
+html[data-theme="dark"] .contact-mark,
+html[data-theme="dark"] .pont-picker-mark,
+html[data-theme="dark"] .option-price,
+html[data-theme="dark"] .promo-label,
+html[data-theme="dark"] .order-number span {
+  background: var(--pont-accent-soft) !important;
+  color: #ffb06a !important;
+  border-color: rgba(255,126,27,0.22) !important;
+}
+
+html[data-theme="dark"] .btn,
+html[data-theme="dark"] .checkout-btn,
+html[data-theme="dark"] .modal-add-btn,
+html[data-theme="dark"] .empty-cart-menu-btn {
+  background: linear-gradient(135deg, #ff7e1b, #ff4fa3) !important;
+  color: #fff !important;
+  box-shadow: 0 12px 30px rgba(255, 126, 27, 0.22) !important;
+}
+
+html[data-theme="dark"] .btn:hover,
+html[data-theme="dark"] .checkout-btn:hover,
+html[data-theme="dark"] .modal-add-btn:hover,
+html[data-theme="dark"] .empty-cart-menu-btn:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 16px 36px rgba(255, 126, 27, 0.32) !important;
+}
+
+html[data-theme="dark"] .telegram-btn,
+html[data-theme="dark"] .floating-telegram {
+  background: linear-gradient(135deg, #229ed9, #0f6dff) !important;
+}
+
+html[data-theme="dark"] .map-btn,
+html[data-theme="dark"] .clear-btn {
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid var(--pont-border) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .cart-overlay,
+html[data-theme="dark"] .product-modal-overlay {
+  background: rgba(0, 0, 0, 0.72) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+html[data-theme="dark"] .cart-drawer {
+  background: #0c0e14 !important;
+  border-left: 1px solid var(--pont-border) !important;
+  box-shadow: -24px 0 70px rgba(0,0,0,0.58) !important;
+}
+
+html[data-theme="dark"] .cart-drawer-header,
+html[data-theme="dark"] .cart-drawer-footer {
+  background: rgba(12, 14, 20, 0.94) !important;
+  border-color: var(--pont-border) !important;
+  box-shadow: 0 -12px 30px rgba(0,0,0,0.24) !important;
+}
+
+html[data-theme="dark"] .cart-close,
+html[data-theme="dark"] .product-modal-close,
+html[data-theme="dark"] .qty-btn {
+  background: rgba(255,255,255,0.08) !important;
+  color: var(--pont-text) !important;
+  border: 1px solid var(--pont-border) !important;
+}
+
+html[data-theme="dark"] .cart-close:hover,
+html[data-theme="dark"] .product-modal-close:hover,
+html[data-theme="dark"] .qty-btn:hover {
+  background: var(--pont-accent) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .promo-input,
+html[data-theme="dark"] .customer-input {
+  background: rgba(255,255,255,0.055) !important;
+  color: var(--pont-text) !important;
+  border: 1px solid var(--pont-border) !important;
+}
+
+html[data-theme="dark"] .promo-input::placeholder,
+html[data-theme="dark"] .customer-input::placeholder {
+  color: rgba(246, 243, 238, 0.46) !important;
+}
+
+html[data-theme="dark"] .promo-input:focus,
+html[data-theme="dark"] .customer-input:focus {
+  border-color: var(--pont-accent) !important;
+  box-shadow: 0 0 0 3px rgba(255,126,27,0.16) !important;
+}
+
+html[data-theme="dark"] .promo-message:not(.error) {
+  color: #77e6a6 !important;
+}
+
+html[data-theme="dark"] .promo-message.error {
+  color: #ff7777 !important;
+}
+
+html[data-theme="dark"] .summary-row.total-row {
+  border-top-color: var(--pont-border) !important;
+}
+
+html[data-theme="dark"] .option-card.active {
+  background: linear-gradient(135deg, rgba(255,126,27,0.20), rgba(255,79,163,0.14)) !important;
+  border-color: var(--pont-border-strong) !important;
+}
+
+html[data-theme="dark"] .product-counter-btn {
+  background: rgba(255,126,27,0.14) !important;
+  border: 1px solid rgba(255,126,27,0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+
+html[data-theme="dark"] .card-counter-action {
+  background: rgba(255,255,255,0.10) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .mobile-category-bar {
+  background: rgba(8, 9, 13, 0.72) !important;
+  border-bottom-color: var(--pont-border) !important;
+  backdrop-filter: blur(14px) !important;
+}
+
+html[data-theme="dark"] .mobile-mini-cart {
+  background: rgba(17, 19, 27, 0.92) !important;
+  color: #fff !important;
+  border: 1px solid var(--pont-border-strong) !important;
+  box-shadow: 0 18px 46px rgba(0,0,0,0.44), 0 0 30px rgba(255,126,27,0.10) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+html[data-theme="dark"] .mobile-mini-cart-action {
+  background: linear-gradient(135deg, #ff7e1b, #ff4fa3) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] footer {
+  background: #06070a !important;
+  color: rgba(246,243,238,0.74) !important;
+  border-top: 1px solid var(--pont-border) !important;
+}
+
+html[data-theme="dark"] .notification {
+  background: rgba(15, 18, 24, 0.96) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255,126,27,0.28) !important;
+  box-shadow: 0 18px 44px rgba(0,0,0,0.38) !important;
+}
+
+html[data-theme="dark"] .notification.error {
+  background: rgba(60, 15, 18, 0.96) !important;
+  border-color: rgba(255,90,90,0.32) !important;
+}
+
+@media (max-width: 700px) {
+  .theme-toggle {
+    padding: 10px 12px !important;
+    min-height: 42px !important;
+  }
+
+  .theme-toggle span {
+    display: none !important;
+  }
+
+  html[data-theme="dark"] .hero-content {
+    border-radius: 24px !important;
+  }
+}
+
+
+/* =======================
+   PREMIUM DARK REWORK v29
+   Чище фон, ровнее карточки, меньше лишнего свечения.
+======================= */
+html[data-theme="dark"] {
+  --pont-bg: #08090d;
+  --pont-bg-2: #0b0d12;
+  --pont-panel: #11141c;
+  --pont-panel-2: #151923;
+  --pont-line: rgba(255, 255, 255, 0.085);
+  --pont-line-soft: rgba(255, 255, 255, 0.055);
+  --pont-text: #f7f3ee;
+  --pont-muted: #b9b0a4;
+  --pont-accent: #ff8a2a;
+  --pont-pink: #ff4f93;
+}
+
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 18% -8%, rgba(255, 138, 42, 0.16), transparent 31%),
+    radial-gradient(circle at 92% 3%, rgba(255, 79, 147, 0.10), transparent 28%),
+    linear-gradient(180deg, #08090d 0%, #0b0d12 44%, #08090d 100%) !important;
+  color: var(--pont-text) !important;
+}
+
+html[data-theme="dark"] body::before {
+  display: none !important;
+}
+
+html[data-theme="dark"] header {
+  padding: 14px 10% !important;
+  background: rgba(7, 8, 12, 0.96) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.36) !important;
+  backdrop-filter: blur(16px) !important;
+}
+
+html[data-theme="dark"] .logo {
+  font-size: 2.55em !important;
+  letter-spacing: 8px !important;
+  color: #fff !important;
+  text-shadow: 0 0 16px rgba(255, 79, 147, 0.34) !important;
+}
+
+html[data-theme="dark"] nav {
+  gap: 14px !important;
+}
+
+html[data-theme="dark"] nav a {
+  color: rgba(247, 243, 238, 0.84) !important;
+}
+
+html[data-theme="dark"] nav a:hover {
+  color: var(--pont-accent) !important;
+}
+
+html[data-theme="dark"] .cart-toggle,
+html[data-theme="dark"] .theme-toggle {
+  min-height: 42px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+  border: 1px solid rgba(255, 255, 255, 0.095) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .cart-toggle:hover,
+html[data-theme="dark"] .theme-toggle:hover {
+  transform: translateY(-1px) !important;
+  background: rgba(255, 138, 42, 0.11) !important;
+  border-color: rgba(255, 138, 42, 0.34) !important;
+}
+
+html[data-theme="dark"] .theme-toggle[aria-pressed="true"] {
+  background: rgba(255, 138, 42, 0.12) !important;
+  border-color: rgba(255, 138, 42, 0.38) !important;
+}
+
+html[data-theme="dark"] .cart-badge,
+html[data-theme="dark"] .menu-tab.active,
+html[data-theme="dark"] .mobile-category-bar a.active {
+  background: linear-gradient(135deg, #ff8a2a, #ff4f93) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 10px 22px rgba(255, 96, 52, 0.20) !important;
+}
+
+html[data-theme="dark"] body > section:not(.hero) {
+  max-width: 1500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 7% !important;
+  padding-right: 7% !important;
+}
+
+html[data-theme="dark"] #shawarma {
+  padding-top: 88px !important;
+  scroll-margin-top: 96px !important;
+}
+
+html[data-theme="dark"] section h2 {
+  color: #fff !important;
+  letter-spacing: 0.02em;
+}
+
+html[data-theme="dark"] .menu-tabs {
+  margin: 8px 0 34px !important;
+  gap: 10px !important;
+}
+
+html[data-theme="dark"] .menu-tab {
+  background: rgba(255, 255, 255, 0.045) !important;
+  color: rgba(247, 243, 238, 0.82) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .menu-tab:hover {
+  background: rgba(255, 138, 42, 0.10) !important;
+  color: #fff !important;
+  border-color: rgba(255, 138, 42, 0.30) !important;
+}
+
+html[data-theme="dark"] .menu {
+  gap: 26px !important;
+}
+
+html[data-theme="dark"] .item {
+  padding: 12px !important;
+  border-radius: 28px !important;
+  background: linear-gradient(180deg, rgba(23, 27, 37, 0.98), rgba(12, 14, 20, 0.98)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.32) !important;
+  overflow: hidden !important;
+}
+
+html[data-theme="dark"] .item:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(255, 138, 42, 0.24) !important;
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.42) !important;
+}
+
+html[data-theme="dark"] .item img {
+  height: 240px !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.075) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.025)) !important;
+}
+
+html[data-theme="dark"] #shawarma .item img {
+  object-fit: cover !important;
+}
+
+html[data-theme="dark"] #combo .item img {
+  height: 240px !important;
+  object-fit: contain !important;
+  padding: 8px !important;
+  background: #f6f1eb !important;
+}
+
+html[data-theme="dark"] #snacks .item img,
+html[data-theme="dark"] #sauces .item img,
+html[data-theme="dark"] #drinks .item img {
+  object-fit: contain !important;
+  padding: 16px !important;
+  background: #f7f3ee !important;
+}
+
+html[data-theme="dark"] #snacks .item img {
+  height: 220px !important;
+}
+
+html[data-theme="dark"] #sauces .item img {
+  height: 180px !important;
+}
+
+html[data-theme="dark"] #drinks .item img {
+  height: 230px !important;
+}
+
+html[data-theme="dark"] .item h3 {
+  margin-top: 18px !important;
+  margin-bottom: 8px !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .item p {
+  color: rgba(247, 243, 238, 0.68) !important;
+  line-height: 1.58 !important;
+}
+
+html[data-theme="dark"] .card-actions {
+  padding-bottom: 8px !important;
+}
+
+html[data-theme="dark"] .price {
+  background: rgba(255, 138, 42, 0.12) !important;
+  color: #ffb06d !important;
+  border: 1px solid rgba(255, 138, 42, 0.18) !important;
+}
+
+html[data-theme="dark"] .btn,
+html[data-theme="dark"] .checkout-btn,
+html[data-theme="dark"] .modal-add-btn,
+html[data-theme="dark"] .empty-cart-menu-btn {
+  background: linear-gradient(135deg, #ff8a2a, #ff4f93) !important;
+  color: #fff !important;
+  border: none !important;
+  box-shadow: 0 12px 28px rgba(255, 91, 63, 0.22) !important;
+}
+
+html[data-theme="dark"] .btn:hover,
+html[data-theme="dark"] .checkout-btn:hover,
+html[data-theme="dark"] .modal-add-btn:hover,
+html[data-theme="dark"] .empty-cart-menu-btn:hover {
+  transform: translateY(-1px) !important;
+  filter: brightness(1.06) !important;
+  box-shadow: 0 16px 34px rgba(255, 91, 63, 0.30) !important;
+}
+
+html[data-theme="dark"] .product-counter-btn {
+  background: rgba(255, 138, 42, 0.13) !important;
+  border: 1px solid rgba(255, 138, 42, 0.26) !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .card-counter-action {
+  background: rgba(255, 255, 255, 0.11) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .about-card,
+html[data-theme="dark"] .contact-card,
+html[data-theme="dark"] .adv-card,
+html[data-theme="dark"] .pont-picker-card,
+html[data-theme="dark"] .shake-pont-card,
+html[data-theme="dark"] .pont-choice,
+html[data-theme="dark"] .cart-row,
+html[data-theme="dark"] .promo-block,
+html[data-theme="dark"] .customer-block,
+html[data-theme="dark"] .order-success-card,
+html[data-theme="dark"] .product-modal,
+html[data-theme="dark"] .option-card,
+html[data-theme="dark"] .empty-cart-state {
+  background: linear-gradient(180deg, rgba(22, 26, 35, 0.98), rgba(12, 14, 20, 0.98)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.30) !important;
+}
+
+html[data-theme="dark"] .about-point,
+html[data-theme="dark"] .contact-info-item,
+html[data-theme="dark"] .cart-summary-list,
+html[data-theme="dark"] .cart-controls,
+html[data-theme="dark"] .empty-cart-icon,
+html[data-theme="dark"] .pont-choice-list li,
+html[data-theme="dark"] .pont-choice-total {
+  background: rgba(255, 255, 255, 0.045) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+html[data-theme="dark"] .cart-drawer {
+  background: #0b0d12 !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] .cart-drawer-header,
+html[data-theme="dark"] .cart-drawer-footer {
+  background: rgba(11, 13, 18, 0.98) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-theme="dark"] .promo-input,
+html[data-theme="dark"] .customer-input {
+  background: rgba(255, 255, 255, 0.055) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+}
+
+html[data-theme="dark"] .clear-btn,
+html[data-theme="dark"] .map-btn {
+  background: rgba(255, 255, 255, 0.07) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .hero-content {
+  background: rgba(8, 9, 13, 0.28) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.26) !important;
+}
+
+html[data-theme="dark"] .hero::after {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.72), rgba(8, 9, 13, 0.38), rgba(0, 0, 0, 0.70)) !important;
+}
+
+html[data-theme="dark"] footer {
+  background: #07080c !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+@media (max-width: 1100px) {
+  html[data-theme="dark"] body > section:not(.hero) {
+    padding-left: 6% !important;
+    padding-right: 6% !important;
+  }
+}
+
+@media (max-width: 700px) {
+  html[data-theme="dark"] body > section:not(.hero) {
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+  }
+
+  html[data-theme="dark"] header {
+    background: #08090d !important;
+    padding: 10px 5% 9px !important;
+  }
+
+  html[data-theme="dark"] .logo {
+    font-size: 2em !important;
+    letter-spacing: 6px !important;
+  }
+
+  html[data-theme="dark"] .mobile-category-bar {
+    background: rgba(8, 9, 13, 0.96) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+
+  html[data-theme="dark"] .mobile-category-bar a,
+  html[data-theme="dark"] .mobile-category-bar a:first-child {
+    background: rgba(255, 255, 255, 0.055) !important;
+    color: rgba(247, 243, 238, 0.82) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  html[data-theme="dark"] #shawarma {
+    padding-top: 34px !important;
+  }
+
+  html[data-theme="dark"] .item {
+    padding: 10px !important;
+    border-radius: 24px !important;
+  }
+
+  html[data-theme="dark"] .item:hover {
+    transform: none !important;
+  }
+
+  html[data-theme="dark"] .item img {
+    height: 190px !important;
+    border-radius: 18px !important;
+  }
+
+  html[data-theme="dark"] #combo .item img {
+    height: 230px !important;
+    padding: 8px !important;
+    transform: none !important;
+  }
+
+  html[data-theme="dark"] #snacks .item img,
+  html[data-theme="dark"] #sauces .item img {
+    height: 165px !important;
+    padding: 14px !important;
+  }
+
+  html[data-theme="dark"] #drinks .item img {
+    height: 230px !important;
+    padding: 8px !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  html[data-theme="dark"] .item h3 {
+    margin-top: 13px !important;
+  }
+
+  html[data-theme="dark"] .item p {
+    color: rgba(247, 243, 238, 0.66) !important;
+  }
+
+  html[data-theme="dark"] .theme-toggle {
+    min-width: 42px !important;
+  }
+}
+
+
+/* =======================
+   DARK THEME FINAL CLEANUP v30
+   Исправлены карточки и товарные фото: без белых плашек, крупнее продукты.
+======================= */
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at 18% -10%, rgba(255, 138, 42, 0.13), transparent 32%),
+    radial-gradient(circle at 88% -6%, rgba(255, 79, 147, 0.09), transparent 30%),
+    linear-gradient(180deg, #07080c 0%, #0a0c11 42%, #07080c 100%) !important;
+}
+
+html[data-theme="dark"] header {
+  min-height: 82px !important;
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+html[data-theme="dark"] body > section:not(.hero) {
+  max-width: 1360px !important;
+  padding-left: 6% !important;
+  padding-right: 6% !important;
+}
+
+html[data-theme="dark"] .menu {
+  gap: 24px !important;
+}
+
+html[data-theme="dark"] .item {
+  padding: 10px !important;
+  border-radius: 24px !important;
+  background: linear-gradient(180deg, rgba(19, 22, 31, 0.98), rgba(10, 12, 18, 0.99)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.34) !important;
+}
+
+html[data-theme="dark"] .item:hover {
+  border-color: rgba(255, 138, 42, 0.26) !important;
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.44) !important;
+}
+
+html[data-theme="dark"] .item img {
+  width: 100% !important;
+  height: 230px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(255, 138, 42, 0.18), transparent 34%),
+    radial-gradient(circle at 50% 70%, rgba(255, 255, 255, 0.075), transparent 42%),
+    linear-gradient(180deg, #171a22 0%, #10131a 100%) !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  padding: 18px !important;
+}
+
+html[data-theme="dark"] #shawarma .item img {
+  height: 246px !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  background: transparent !important;
+}
+
+html[data-theme="dark"] #combo .item img {
+  height: 238px !important;
+  padding: 18px !important;
+  object-fit: contain !important;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(255, 138, 42, 0.18), transparent 36%),
+    linear-gradient(180deg, #171a22 0%, #10131a 100%) !important;
+}
+
+html[data-theme="dark"] #snacks .item img {
+  height: 214px !important;
+  padding: 16px !important;
+  object-fit: contain !important;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255, 138, 42, 0.20), transparent 36%),
+    linear-gradient(180deg, #171a22 0%, #10131a 100%) !important;
+}
+
+html[data-theme="dark"] #sauces .item img {
+  height: 190px !important;
+  padding: 12px !important;
+  object-fit: contain !important;
+  background: #11141c !important;
+}
+
+html[data-theme="dark"] #drinks .item img {
+  height: 238px !important;
+  padding: 14px !important;
+  margin: 0 !important;
+  transform: none !important;
+  object-fit: contain !important;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(255, 79, 147, 0.12), transparent 34%),
+    radial-gradient(circle at 50% 58%, rgba(255, 138, 42, 0.14), transparent 42%),
+    linear-gradient(180deg, #171a22 0%, #10131a 100%) !important;
+}
+
+html[data-theme="dark"] .item h3 {
+  margin-top: 15px !important;
+  margin-bottom: 7px !important;
+  font-weight: 900 !important;
+}
+
+html[data-theme="dark"] .item p {
+  margin-bottom: 14px !important;
+  color: rgba(247, 243, 238, 0.70) !important;
+}
+
+html[data-theme="dark"] .card-actions {
+  padding: 0 12px 10px !important;
+}
+
+html[data-theme="dark"] .price {
+  background: rgba(255, 138, 42, 0.14) !important;
+  border: 1px solid rgba(255, 138, 42, 0.24) !important;
+  color: #ffb26f !important;
+}
+
+html[data-theme="dark"] .add-to-cart,
+html[data-theme="dark"] .open-ser-modal {
+  max-width: 210px !important;
+}
+
+html[data-theme="dark"] .product-counter-btn {
+  max-width: 210px !important;
+  background: rgba(255, 138, 42, 0.14) !important;
+  border: 1px solid rgba(255, 138, 42, 0.30) !important;
+}
+
+@media (max-width: 1100px) {
+  html[data-theme="dark"] body > section:not(.hero) {
+    padding-left: 5% !important;
+    padding-right: 5% !important;
+  }
+}
+
+@media (max-width: 700px) {
+  html[data-theme="dark"] header {
+    min-height: auto !important;
+    padding: 9px 5% 8px !important;
+  }
+
+  html[data-theme="dark"] .menu {
+    gap: 16px !important;
+  }
+
+  html[data-theme="dark"] .item {
+    padding: 9px !important;
+    border-radius: 22px !important;
+  }
+
+  html[data-theme="dark"] .item img {
+    height: 190px !important;
+    padding: 14px !important;
+    border-radius: 17px !important;
+  }
+
+  html[data-theme="dark"] #shawarma .item img {
+    height: 190px !important;
+    padding: 0 !important;
+    object-fit: cover !important;
+  }
+
+  html[data-theme="dark"] #combo .item img {
+    height: 225px !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  html[data-theme="dark"] #snacks .item img,
+  html[data-theme="dark"] #sauces .item img {
+    height: 170px !important;
+    padding: 12px !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  html[data-theme="dark"] #drinks .item img {
+    height: 225px !important;
+    padding: 10px !important;
+    margin: 0 !important;
+    transform: none !important;
+  }
+
+  html[data-theme="dark"] .item h3 {
+    margin-top: 11px !important;
+  }
+
+  html[data-theme="dark"] .add-to-cart,
+  html[data-theme="dark"] .open-ser-modal,
+  html[data-theme="dark"] .product-counter-btn {
+    max-width: none !important;
+  }
+}
+
+
+/* === V4 targeted card polish for dark theme === */
+html[data-theme="dark"] #snacks .item,
+html[data-theme="dark"] #sauces .item,
+html[data-theme="dark"] #drinks .item {
+  background: linear-gradient(180deg, rgba(11,16,28,0.98) 0%, rgba(7,10,18,0.98) 100%) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow: 0 16px 34px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+html[data-theme="dark"] #snacks .item img,
+html[data-theme="dark"] #sauces .item img {
+  width: calc(100% - 24px) !important;
+  margin: 12px auto 0 !important;
+  display: block !important;
+  height: 210px !important;
+  object-fit: cover !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+  box-shadow: none !important;
+}
+html[data-theme="dark"] #sauces .item img { height: 190px !important; }
+html[data-theme="dark"] #drinks .item img {
+  width: calc(100% - 24px) !important;
+  margin: 12px auto 0 !important;
+  display: block !important;
+  height: 220px !important;
+  object-fit: contain !important;
+  padding: 12px 18px 0 !important;
+  background: radial-gradient(circle at 50% 30%, rgba(255,160,90,0.16), rgba(17,22,34,0.85) 60%, rgba(8,10,18,1) 100%) !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,0.04) !important;
+}
+html[data-theme="dark"] #snacks .item h3,
+html[data-theme="dark"] #sauces .item h3,
+html[data-theme="dark"] #drinks .item h3 { margin-top: 18px !important; }
+html[data-theme="dark"] #snacks .item p,
+html[data-theme="dark"] #sauces .item p,
+html[data-theme="dark"] #drinks .item p { min-height: 52px; }
+@media (max-width: 768px) {
+  html[data-theme="dark"] #snacks .item img,
+  html[data-theme="dark"] #sauces .item img,
+  html[data-theme="dark"] #drinks .item img {
+    width: calc(100% - 18px) !important;
+    height: 190px !important;
+    margin-top: 9px !important;
+  }
+  html[data-theme="dark"] #sauces .item img { height: 180px !important; }
+}
+
+
+/* === V6 real cutout cleanup for dark theme === */
+html[data-theme="dark"] #snacks .item img,
+html[data-theme="dark"] #sauces .item img {
+  width: calc(100% - 32px) !important;
+  height: 210px !important;
+  margin: 12px auto 0 !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  padding: 16px 18px 8px !important;
+  background: radial-gradient(circle at 50% 28%, rgba(255,255,255,0.05), rgba(12,18,30,0.92) 58%, rgba(7,10,18,1) 100%) !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+html[data-theme="dark"] #snacks .item img { filter: drop-shadow(0 10px 14px rgba(0,0,0,0.28)); }
+html[data-theme="dark"] #sauces .item img { filter: drop-shadow(0 10px 14px rgba(0,0,0,0.24)); }
+html[data-theme="dark"] #snacks .item, html[data-theme="dark"] #sauces .item {
+  background: linear-gradient(180deg, rgba(11,16,28,0.98) 0%, rgba(7,10,18,0.98) 100%) !important;
+}
+@media (max-width: 768px) {
+  html[data-theme="dark"] #snacks .item img,
+  html[data-theme="dark"] #sauces .item img {
+    width: calc(100% - 20px) !important;
+    height: 190px !important;
+    padding: 14px 14px 6px !important;
+  }
+}
+
+
+/* === V7 final image strategy: premium light product stage inside dark cards ===
+   Причина: у части исходных фото белая тарелка/тень уже зашита в картинку.
+   На полностью тёмной подложке это всегда будет выглядеть как плохая вырезка.
+   Поэтому для таких товаров используется аккуратная светлая product-stage зона.
+*/
+html[data-theme="dark"] #snacks .item,
+html[data-theme="dark"] #sauces .item,
+html[data-theme="dark"] #drinks .item {
+  background:
+    linear-gradient(180deg, rgba(12, 17, 29, 0.98) 0%, rgba(7, 10, 18, 0.99) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  box-shadow:
+    0 20px 46px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+html[data-theme="dark"] #snacks .item img,
+html[data-theme="dark"] #sauces .item img,
+html[data-theme="dark"] #drinks .item img {
+  width: calc(100% - 28px) !important;
+  height: 224px !important;
+  margin: 14px auto 0 !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  padding: 18px 22px !important;
+  border-radius: 20px !important;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(250, 245, 238, 0.98) 44%, rgba(232, 222, 209, 0.98) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -18px 40px rgba(120, 80, 45, 0.08) !important;
+  filter: none !important;
+}
+
+html[data-theme="dark"] #sauces .item img {
+  height: 206px !important;
+  padding: 24px 34px !important;
+}
+
+html[data-theme="dark"] #drinks .item img {
+  height: 236px !important;
+  padding: 12px 30px !important;
+}
+
+html[data-theme="dark"] #snacks .item h3,
+html[data-theme="dark"] #sauces .item h3,
+html[data-theme="dark"] #drinks .item h3 {
+  margin-top: 18px !important;
+}
+
+html[data-theme="dark"] #snacks .item p,
+html[data-theme="dark"] #sauces .item p,
+html[data-theme="dark"] #drinks .item p {
+  color: rgba(245, 247, 255, 0.76) !important;
+}
+
+/* Миниатюры в корзине: та же логика, чтобы не было грязного контура на тёмном фоне */
+html[data-theme="dark"] .cart-item-thumb {
+  background:
+    radial-gradient(circle at 50% 35%, #fff 0%, #f4eee5 58%, #ded2c3 100%) !important;
+  padding: 6px !important;
+  object-fit: contain !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  filter: none !important;
+}
+
+@media (max-width: 768px) {
+  html[data-theme="dark"] #snacks .item img,
+  html[data-theme="dark"] #sauces .item img,
+  html[data-theme="dark"] #drinks .item img {
+    width: calc(100% - 18px) !important;
+    height: 196px !important;
+    margin-top: 9px !important;
+    padding: 14px 18px !important;
+    border-radius: 18px !important;
+  }
+
+  html[data-theme="dark"] #sauces .item img {
+    height: 184px !important;
+    padding: 18px 24px !important;
+  }
+
+  html[data-theme="dark"] #drinks .item img {
+    height: 210px !important;
+    padding: 10px 22px !important;
+  }
+}
+
+
+
+/* === V8: apply the same premium image treatment to combo and shawarma === */
+html[data-theme="dark"] #shawarma .item,
+html[data-theme="dark"] #combo .item {
+  background:
+    linear-gradient(180deg, rgba(12, 17, 29, 0.98) 0%, rgba(7, 10, 18, 0.99) 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.085) !important;
+  box-shadow:
+    0 20px 46px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+}
+
+html[data-theme="dark"] #shawarma .item img,
+html[data-theme="dark"] #combo .item img {
+  width: calc(100% - 28px) !important;
+  margin: 14px auto 0 !important;
+  display: block !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 -18px 40px rgba(120, 80, 45, 0.08) !important;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.95) 0%, rgba(250, 245, 238, 0.98) 44%, rgba(232, 222, 209, 0.98) 100%) !important;
+}
+
+/* Комбо уже имеют прозрачный фон — для них stage работает как надо */
+html[data-theme="dark"] #combo .item img {
+  height: 224px !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  padding: 16px 20px !important;
+}
+
+/* У шаурмы исходные изображения цветные, поэтому оставляем полный кадр,
+   но помещаем его в ту же премиальную зону для визуального единства */
+html[data-theme="dark"] #shawarma .item img {
+  height: 246px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  padding: 0 !important;
+}
+
+/* И миниатюры в корзине тоже приводим к общему виду */
+html[data-theme="dark"] .cart-item-thumb {
+  background:
+    radial-gradient(circle at 50% 35%, #fff 0%, #f4eee5 58%, #ded2c3 100%) !important;
+  padding: 6px !important;
+  object-fit: contain !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  filter: none !important;
+}
+
+@media (max-width: 768px) {
+  html[data-theme="dark"] #shawarma .item img,
+  html[data-theme="dark"] #combo .item img {
+    width: calc(100% - 18px) !important;
+    margin-top: 9px !important;
+    border-radius: 18px !important;
+  }
+
+  html[data-theme="dark"] #shawarma .item img {
+    height: 220px !important;
+  }
+
+  html[data-theme="dark"] #combo .item img {
+    height: 200px !important;
+    padding: 12px 16px !important;
+  }
+}
+
+
+
+/* === V9 fixes: restore light theme and revert shawarma latest dark styling === */
+/* 1) Light theme reset so premium dark-only tweaks do not visually break the light theme */
+html[data-theme="light"] .item {
+  background: #fff !important;
+  border: none !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+html[data-theme="light"] .item img {
+  width: 100% !important;
+  height: 260px !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  filter: none !important;
+}
+
+html[data-theme="light"] #combo .item img {
+  height: 260px !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  background: #fff !important;
+}
+
+html[data-theme="light"] #sauces .item img {
+  height: 180px !important;
+  object-fit: contain !important;
+  padding: 14px !important;
+  background: #fafafa !important;
+}
+
+html[data-theme="light"] #drinks .item img {
+  height: 220px !important;
+  object-fit: contain !important;
+  padding: 10px 14px !important;
+  background: #fff !important;
+}
+
+html[data-theme="light"] .cart-item-thumb {
+  background: #fff !important;
+  padding: 0 !important;
+  border: none !important;
+  filter: none !important;
+}
+
+/* 2) Remove the latest shawarma image treatment in dark theme and keep shawarma in the previous look */
+html[data-theme="dark"] #shawarma .item img {
+  width: 100% !important;
+  height: 240px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+html[data-theme="dark"] #shawarma .item {
+  background: linear-gradient(180deg, rgba(12, 17, 29, 0.98) 0%, rgba(7, 10, 18, 0.99) 100%) !important;
+}
+
+@media (max-width: 768px) {
+  html[data-theme="light"] .item img {
+    height: 210px !important;
+  }
+
+  html[data-theme="light"] #combo .item img {
+    height: 230px !important;
+  }
+
+  html[data-theme="light"] #sauces .item img,
+  html[data-theme="light"] #drinks .item img {
+    height: 160px !important;
+    object-fit: contain !important;
+    padding: 12px !important;
+  }
+
+  html[data-theme="dark"] #shawarma .item img {
+    height: 220px !important;
+  }
+}
+
+
+/* === V11: restore original light-theme look for combo and snacks === */
+html[data-theme="light"] #combo .item img {
+  width: 100% !important;
+  height: 260px !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  padding: 10px 10px 0 !important;
+  margin: 0 !important;
+  background: #fff !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"] #snacks .item img {
+  width: 100% !important;
+  height: 220px !important;
+  display: block !important;
+  object-fit: contain !important;
+  object-position: center !important;
+  padding: 14px !important;
+  margin: 0 !important;
+  background: #fff !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="light"] #snacks .item,
+html[data-theme="light"] #combo .item {
+  overflow: hidden !important;
+}
+
+@media (max-width: 600px) {
+  html[data-theme="light"] #combo .item img {
+    height: 230px !important;
+    padding: 8px 8px 0 !important;
+  }
+
+  html[data-theme="light"] #snacks .item img {
+    height: 190px !important;
+    padding: 12px !important;
+  }
+}
+
+
+/* === V12: rounded shawarma image corners in dark theme (like preferred screenshot) === */
+html[data-theme="dark"] #shawarma .item img {
+  width: calc(100% - 20px) !important;
+  margin: 10px auto 0 !important;
+  height: 232px !important;
+  display: block !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  padding: 0 !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+@media (max-width: 768px) {
+  html[data-theme="dark"] #shawarma .item img {
+    width: calc(100% - 18px) !important;
+    margin-top: 9px !important;
+    height: 210px !important;
+    border-radius: 16px !important;
+  }
+}
