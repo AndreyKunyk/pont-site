@@ -4245,3 +4245,102 @@ html[data-theme="dark"] #shawarma .item img {
     border-radius: 16px !important;
   }
 }
+
+
+/* === V14: remove extra yellow/brown bars in Ser modal and promo block === */
+html[data-theme="dark"] .option-card .option-price,
+html[data-theme="dark"] .option-card-price,
+html[data-theme="dark"] .option-price,
+html[data-theme="dark"] .addon-price,
+html[data-theme="dark"] .ser-option-price {
+  display: inline !important;
+  width: auto !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: #ffb36b !important;
+}
+
+html[data-theme="dark"] .option-card span,
+html[data-theme="dark"] .option-card strong,
+html[data-theme="dark"] .option-card label {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .promo-title,
+html[data-theme="dark"] .promo-label,
+html[data-theme="dark"] .promo-row label,
+html[data-theme="dark"] .promo-block label,
+html[data-theme="dark"] .cart-promo label {
+  display: inline !important;
+  width: auto !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: #ffb36b !important;
+}
+
+/* На случай, если коричневая полоска задана не label, а внутренним контейнером */
+html[data-theme="dark"] .promo-row,
+html[data-theme="dark"] .promo-block,
+html[data-theme="dark"] .cart-promo,
+html[data-theme="dark"] .promo-section {
+  background-image: none !important;
+}
+
+html[data-theme="dark"] #promo-message {
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+
+
+/* === V16: keep cart as before, but make shawarma thumbnails bigger like in the reference === */
+html[data-theme="dark"] .cart-item-thumb.shawarma-cart-thumb,
+html[data-theme="light"] .cart-item-thumb.shawarma-cart-thumb {
+  width: 66px !important;
+  height: 66px !important;
+  padding: 0 !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  background: #fff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+
+
+/* === V17: fix mobile dark hero button alignment === */
+@media (max-width: 700px) {
+  html[data-theme="dark"] .hero-content {
+    width: min(88vw, 460px) !important;
+    margin: 0 auto !important;
+    padding: 26px 18px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  html[data-theme="dark"] .hero h2,
+  html[data-theme="dark"] .hero p {
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  html[data-theme="dark"] .hero .btn {
+    display: block !important;
+    margin: 4px auto 0 !important;
+    text-align: center !important;
+    min-width: 210px !important;
+  }
+}
+

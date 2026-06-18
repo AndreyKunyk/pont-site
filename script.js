@@ -429,6 +429,27 @@ function updatePromoUI() {
   }
 }
 
+
+function isCartShawarmaItem(item) {
+  const shawarmaImages = [
+    "5215357575149325867.jpg",
+    "ser.jpg",
+    "mon.jpg",
+    "fantanuni.jpg",
+    "krytini.jpg",
+    "minikyr.jpg"
+  ];
+
+  return shawarmaImages.includes(item.image) || [
+    "Сен-Мишель",
+    "Сэр-Жермен",
+    "Мон-Моди",
+    "Фантанини",
+    "Крутини",
+    "Миникюр"
+  ].includes(item.name);
+}
+
 function renderCartItem(item) {
   const lineTotal = item.price * item.quantity;
   const row = document.createElement("div");
@@ -436,7 +457,7 @@ function renderCartItem(item) {
 
   row.innerHTML = `
     <div class="cart-item-left">
-      <img src="${item.image || "5215357575149325867.jpg"}" alt="${item.name}" class="cart-item-thumb">
+      <img src="${item.image || "5215357575149325867.jpg"}" alt="${item.name}" class="cart-item-thumb ${isCartShawarmaItem(item) ? 'shawarma-cart-thumb' : ''}">
       <div class="cart-item-info">
         <div class="cart-item-name">${item.name}</div>
         <div class="cart-item-price">${item.price} ₽ за шт.</div>
