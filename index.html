@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PONT - заказать шаурму онлайн</title>
+  <title>KUNIK — заказать шаурму онлайн</title>
 
-  <meta name="description" content="PONT - свежая шаурма, комбо, закуски и напитки. Быстрое оформление заказа через сайт.">
+  <meta name="description" content="KUNIK — свежая шаурма, закуски и авторские соусы. Быстрое оформление заказа через сайт.">
   <link rel="canonical" href="https://pont.website/">
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://pont.website/">
-  <meta property="og:title" content="PONT — заказать шаурму онлайн">
+  <meta property="og:title" content="KUNIK — заказать шаурму онлайн">
   <meta property="og:description" content="Свежие ингредиенты, авторские соусы и быстрый заказ через сайт.">
   <meta property="og:image" content="https://pont.website/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PONT - заказать шаурму онлайн">
+  <meta name="twitter:title" content="KUNIK — заказать шаурму онлайн">
   <meta name="twitter:description" content="Свежие ингредиенты, авторские соусы и быстрый заказ через сайт.">
   <meta name="twitter:image" content="https://pont.website/og-image.png">
 
@@ -26,23 +26,24 @@
   <link rel="apple-touch-icon" href="favicon.png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <meta name="theme-color" content="#08090d" id="theme-color-meta">
+  <meta name="api-base-url" content="https://pont-site.onrender.com">
   <script>
     (function () {
       try {
-        var savedTheme = localStorage.getItem("pontTheme");
+        var savedTheme = localStorage.getItem("kunikTheme") || localStorage.getItem("pontTheme");
         document.documentElement.setAttribute("data-theme", savedTheme === "light" ? "light" : "dark");
       } catch (error) {
         document.documentElement.setAttribute("data-theme", "dark");
       }
     })();
   </script>
-  <link rel="stylesheet" href="style.css?v=43">
+  <link rel="stylesheet" href="style.css?v=45">
 </head>
 
 <body>
 
   <header>
-    <h1 class="logo">PONT</h1>
+    <h1 class="logo">KUNIK</h1>
     <nav>
       <a href="#shawarma">Меню</a>
       <a href="#about">О нас</a>
@@ -63,15 +64,13 @@
 
   <div class="mobile-category-bar" aria-label="Категории меню">
     <a href="#shawarma">Шаурма</a>
-    <a href="#combo">Комбо</a>
     <a href="#snacks">Закуски</a>
     <a href="#sauces">Соусы</a>
-    <a href="#drinks">Напитки</a>
   </div>
 
   <section class="hero visible">
     <div class="hero-content">
-      <h2>PONT</h2>
+      <h2>KUNIK</h2>
       <p>Свежие ингредиенты. Авторские соусы. Без компромиссов по качеству.</p>
       <button class="btn" onclick="window.location.href='#shawarma'">Сделать заказ</button>
     </div>
@@ -82,10 +81,8 @@
 
     <div class="menu-tabs">
       <a href="#shawarma" class="menu-tab active">Шаурма</a>
-      <a href="#combo" class="menu-tab">Комбо</a>
       <a href="#snacks" class="menu-tab">Закуски</a>
       <a href="#sauces" class="menu-tab">Соусы</a>
-      <a href="#drinks" class="menu-tab">Напитки</a>
     </div>
 
     <div class="menu">
@@ -207,70 +204,7 @@
     </div>
   </section>
 
-  <section id="combo" class="visible">
-    <h2>Комбо</h2>
-
-    <div class="menu">
-      <div class="item">
-        <img src="kom1.jpg" alt="Комбо «Клубничный PONT»">
-        <h3>Комбо «Клубничный PONT»</h3>
-        <p>
-          Клубничный чай, хрустящий картофель фри и фирменный соус - сочное комбо для быстрого перекуса.
-        </p>
-
-        <div class="card-actions">
-          <div class="price">460 ₽</div>
-          <button class="btn add-to-cart"
-                  data-name="Комбо «Клубничный PONT»"
-                  data-price="460"
-                  data-image="kom1.jpg"
-                  type="button">
-            Добавить в заказ
-          </button>
-        </div>
-      </div>
-
-      <div class="item">
-        <img src="kom2.jpg" alt="Комбо «Облепиховый PONT»">
-        <h3>Комбо «Облепиховый PONT»</h3>
-        <p>
-          Облепиховый чай, хрустящий картофель фри и фирменный соус - яркое сочетание вкуса, хруста и свежести.
-        </p>
-
-        <div class="card-actions">
-          <div class="price">460 ₽</div>
-          <button class="btn add-to-cart"
-                  data-name="Комбо «Облепиховый PONT»"
-                  data-price="460"
-                  data-image="kom2.jpg"
-                  type="button">
-            Добавить в заказ
-          </button>
-        </div>
-      </div>
-
-      <div class="item">
-        <img src="kom3.jpg" alt="Комбо «Лимонный PONT»">
-        <h3>Комбо «Лимонный PONT»</h3>
-        <p>
-          Лимонный чай с мятой, хрустящий картофель фри и кисло-сладкий соус - освежающий сет с цитрусовым акцентом.
-        </p>
-
-        <div class="card-actions">
-          <div class="price">460 ₽</div>
-          <button class="btn add-to-cart"
-                  data-name="Комбо «Лимонный PONT»"
-                  data-price="460"
-                  data-image="kom3.jpg"
-                  type="button">
-            Добавить в заказ
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="snacks" class="visible">
+<section id="snacks" class="visible">
     <h2>Закуски</h2>
     <div class="menu">
 
@@ -359,7 +293,7 @@
     <div class="item">
       <img src="sfirm.jpg" alt="Фирменный">
       <h3>Фирменный</h3>
-      <p>Авторский фирменный соус PONT.</p>
+      <p>Авторский фирменный соус KUNIK.</p>
       <div class="card-actions">
         <div class="price">60 ₽</div>
         <button class="btn add-to-cart"
@@ -438,95 +372,8 @@
   </div>
 </section>
 
-  <section id="drinks" class="visible">
-    <h2>Напитки</h2>
-    <div class="menu">
-
-  <div class="item">
-    <img src="obl.jpg" alt="Чай облепиховый">
-    <h3>Чай облепиховый</h3>
-    <p>Ароматный облепиховый чай с ярким вкусом и пользой</p>
-
-    <div class="card-actions">
-      <div class="price">290 ₽</div>
-      <button class="btn add-to-cart"
-        data-name="Чай облепиховый"
-        data-price="290"
-        data-image="obl.jpg">
-        Добавить в заказ
-      </button>
-    </div>
-  </div>
-
-<div class="item">
-    <img src="lim.jpg" alt="Чай лимонный">
-    <h3>Чай лимонный</h3>
-    <p>Ароматный лимонный чай с ярким вкусом и пользой</p>
-
-    <div class="card-actions">
-      <div class="price">290 ₽</div>
-      <button class="btn add-to-cart"
-        data-name="Чай лимонный"
-        data-price="290"
-        data-image="lim.jpg">
-        Добавить в заказ
-      </button>
-    </div>
-  </div>
-
-
-<div class="item">
-    <img src="klub.jpg" alt="Чай клубинчный">
-    <h3>Чай клубничный</h3>
-    <p>Ароматный клубничный чай с ярким вкусом и пользой</p>
-
-    <div class="card-actions">
-      <div class="price">290 ₽</div>
-      <button class="btn add-to-cart"
-        data-name="Чай клубничный"
-        data-price="290"
-        data-image="klub.jpg">
-        Добавить в заказ
-      </button>
-    </div>
-  </div>	
-
-</div>
-  </section>
-
-
-  <section class="pont-picker-section shake-pont-section visible" id="pont-picker">
-    <div class="pont-picker-card shake-pont-card">
-      <div class="pont-picker-content">
-        <span class="pont-picker-mark">SHAKE PONT</span>
-        <h2>Потряси телефон - PONT соберёт заказ</h2>
-        <p>Сайт выберет один из готовых наборов. Выпало - можно сразу добавить в корзину.</p>
-      </div>
-
-      <div class="pont-picker-actions shake-pont-actions">
-        <button class="btn pont-picker-btn" id="pont-shake-btn" type="button">Трясти телефон</button>
-        <button class="btn pont-picker-btn pont-picker-secondary" id="pont-pick-btn" type="button">Без тряски</button>
-        <p class="pont-shake-status" id="pont-shake-status">На телефоне - встряхни. На компьютере - выбери кнопкой.</p>
-      </div>
-
-      <div class="pont-choice" id="pont-choice" hidden>
-        <div class="pont-choice-head">
-          <span>Выбор PONT</span>
-          <strong id="pont-choice-title">Готовый набор</strong>
-          <p id="pont-choice-subtitle">Собрали заказ за тебя.</p>
-        </div>
-        <ul class="pont-choice-list" id="pont-choice-list"></ul>
-        <div class="pont-choice-total">
-          <span>Итого</span>
-          <strong id="pont-choice-total">0 ₽</strong>
-        </div>
-        <button class="btn pont-choice-add" id="pont-choice-add-btn" type="button">Добавить набор в заказ</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="advantages" class="visible">
-    <h2>Почему PONT</h2>
+<section id="advantages" class="visible">
+    <h2>Почему KUNIK</h2>
     <div class="advantages">
       <div class="adv-card">
         <h3>Свежие продукты</h3>
@@ -550,7 +397,7 @@
 
     <div class="about-card">
       <p>
-        В PONT мы превращаем уличную еду в премиальное удовольствие. Используем свежее мясо,
+        В KUNIK мы превращаем уличную еду в премиальное удовольствие. Используем свежее мясо,
         овощи и авторские соусы, чтобы каждый заказ был сочным, сытным и запоминающимся.
         Заказ можно быстро оформить прямо на сайте, а информация сразу поступает сотруднику заведения.
       </p>
@@ -562,7 +409,7 @@
 
     <div class="contact-card">
       <div class="contact-card-head">
-        <h3>PONT в Мытищах</h3>
+        <h3>KUNIK в Мытищах</h3>
         <p>Закажите на сайте и заберите свежий заказ без ожидания.</p>
       </div>
 
@@ -608,7 +455,14 @@
   </section>
 
   <footer>
-    <p>© 2026 PONT. Онлайн-заказ еды в Мытищах.</p>
+    <div class="footer-legal-links" aria-label="Юридическая информация">
+      <a href="delivery.html">Оплата и получение</a>
+      <a href="requisites.html">Реквизиты</a>
+      <a href="offer.html">Публичная оферта</a>
+      <a href="privacy.html">Политика конфиденциальности</a>
+    </div>
+    <p>© 2026 KUNIK. Онлайн-заказ еды в Мытищах.</p>
+    <p class="footer-requisites">ИП Кунык Артём Олегович · ИНН 236105423168 · ОГРНИП 325237500125905</p>
     <p class="footer-author">Веб-сайт разработан Кунык Андреем</p>
   </footer>
 
@@ -656,6 +510,42 @@
           id="customer-comment"
           class="customer-input customer-textarea"
           placeholder="Комментарий к заказу"></textarea>
+
+        <fieldset class="payment-methods" id="payment-methods">
+          <legend class="promo-label">Способ оплаты</legend>
+
+          <label class="payment-option active">
+            <input type="radio" name="payment-method" value="online" checked>
+            <span class="payment-option-icon"><i class="fas fa-credit-card"></i></span>
+            <span class="payment-option-copy">
+              <strong>Оплатить онлайн</strong>
+              <small>Переход на защищённую страницу ЮKassa</small>
+            </span>
+          </label>
+
+          <label class="payment-option">
+            <input type="radio" name="payment-method" value="cash">
+            <span class="payment-option-icon"><i class="fas fa-wallet"></i></span>
+            <span class="payment-option-copy">
+              <strong>Оплата при получении</strong>
+              <small>Заказ сразу поступит сотруднику</small>
+            </span>
+          </label>
+
+          <p class="payment-method-note" id="payment-method-note">
+            После нажатия кнопки вы перейдёте на страницу оплаты ЮKassa.
+          </p>
+        </fieldset>
+
+        <label class="legal-consent">
+          <input type="checkbox" id="legal-consent">
+          <span>
+            Оформляя заказ, я принимаю
+            <a href="offer.html" target="_blank" rel="noopener">условия публичной оферты</a>
+            и соглашаюсь с
+            <a href="privacy.html" target="_blank" rel="noopener">политикой обработки персональных данных</a>.
+          </span>
+        </label>
       </div>
       <div class="cart-summary-list">
         <div class="summary-row">
@@ -679,9 +569,9 @@
         </div>
       </div>
 
-      <button class="btn telegram-btn checkout-btn" id="send-order-btn" type="button">
-        <i class="fab fa-telegram-plane"></i>
-        К оформлению заказа
+      <button class="btn checkout-btn payment-submit-btn" id="send-order-btn" type="button">
+        <i class="fas fa-credit-card"></i>
+        К оформлению и оплате
       </button>
 
       <button class="btn clear-btn checkout-btn" id="clear-cart-btn" type="button">
@@ -690,17 +580,17 @@
     </div>
     <div class="order-success" id="order-success">
       <div class="order-success-card receipt-card">
-        <div class="receipt-brand">PONT</div>
+        <div class="receipt-brand">KUNIK</div>
         <div class="order-success-icon">
           <i class="fas fa-check"></i>
         </div>
-        <h3>Заказ принят</h3>
-        <p>Мы получили ваш заказ и скоро свяжемся с вами.</p>
+        <h3 id="order-success-title">Заказ принят</h3>
+        <p id="order-success-message">Мы получили ваш заказ и скоро свяжемся с вами.</p>
         <div class="order-number">
           <span>Номер заказа</span>
-          <strong id="order-success-id">#P000000</strong>
+          <strong id="order-success-id">#K000000</strong>
         </div>
-        <div class="receipt-note">Спасибо, что выбрали PONT.</div>
+        <div class="receipt-note">Спасибо, что выбрали KUNIK.</div>
         <button class="btn checkout-btn" id="back-to-menu-btn" type="button">
           Вернуться в меню
         </button>
@@ -763,7 +653,7 @@
     </div>
   </div>
   <div id="notification" class="notification"></div>
-  <script src="script.js?v=28"></script>
+  <script src="script.js?v=45"></script>
 
 </body>
 </html>
