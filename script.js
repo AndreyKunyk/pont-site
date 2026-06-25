@@ -23,13 +23,22 @@ const SER_PRODUCT = {
   image: "ser.jpg"
 };
 
+const UPDATED_PRODUCT_PRICES = {
+  "Мон-Моди": 510,
+  "Фантанини": 500
+};
 
 function loadSavedCart() {
   try {
     const savedCart = localStorage.getItem(STORAGE_KEYS.cart) || localStorage.getItem(STORAGE_KEYS.oldCart) || "[]";
     const parsedCart = JSON.parse(savedCart);
     if (!Array.isArray(parsedCart)) return [];
-    return parsedCart.filter((item) => !REMOVED_PRODUCT_IMAGES.has(item.image));
+    return parsedCart
+      .filter((item) => !REMOVED_PRODUCT_IMAGES.has(item.image))
+      .map((item) => ({
+        ...item,
+        price: UPDATED_PRODUCT_PRICES[item.name] ?? item.price
+      }));
   } catch (error) {
     localStorage.removeItem(STORAGE_KEYS.cart);
     localStorage.removeItem(STORAGE_KEYS.oldCart);
@@ -46,10 +55,15 @@ const elements = {
   cartTotal: document.getElementById("cart-total"),
   cartBadge: document.getElementById("cart-badge"),
   cartCount: document.getElementById("cart-count"),
-  cartBonus: document.getElementById("cart-bonus"),
+  cartSubtotal: document.getElementById("cart-subtotal"),
+  cartActionTotal: document.getElementById("cart-action-total"),
   cartDiscount: document.getElementById("cart-discount"),
   discountRow: document.getElementById("discount-row"),
 
+  promoBlock: document.getElementById("promo-block"),
+  promoToggle: document.getElementById("promo-toggle"),
+  promoToggleLabel: document.getElementById("promo-toggle-label"),
+  promoToggleAction: document.getElementById("promo-toggle-action"),
   promoInput: document.getElementById("promo-input"),
   applyPromoBtn: document.getElementById("apply-promo-btn"),
   promoMessage: document.getElementById("promo-message"),
@@ -74,6 +88,9 @@ const elements = {
   cartDrawer: document.getElementById("cart-drawer"),
   cartOverlay: document.getElementById("cart-overlay"),
   cartClose: document.getElementById("cart-close"),
+  cartBack: document.getElementById("cart-back"),
+  cartTitle: document.getElementById("cart-title"),
+  cartStepLabel: document.getElementById("cart-step-label"),
 
   serTriggerCard: document.getElementById("ser-product-trigger"),
   serOpenBtn: document.querySelector(".open-ser-modal"),
@@ -167,6 +184,7 @@ function openCart() {
   elements.cartDrawer.classList.add("active");
   elements.cartOverlay.classList.add("active");
   document.body.style.overflow = "hidden";
+  updateCartStepUI();
   updateMobileMiniCart();
 }
 
@@ -177,6 +195,7 @@ function closeCart() {
   elements.cartDrawer.classList.remove("success-mode");
   elements.cartOverlay.classList.remove("active");
   document.body.style.overflow = "";
+  updateCartStepUI();
   updateMobileMiniCart();
 }
 
@@ -325,7 +344,6 @@ function buildOrderPayload(orderId = generateOrderId()) {
   return {
     items: cart,
     itemsCount: totals.itemsCount,
-    bonus: totals.bonus,
     discount: totals.discount,
     total: totals.finalTotal,
     promo: appliedPromo,
@@ -504,13 +522,11 @@ function closeSerModal() {
 function calculateTotals() {
   const itemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const bonus = Math.floor(subtotal * 0.05);
   const discount = appliedPromo === PROMO_CODE ? Math.round(subtotal * PROMO_DISCOUNT) : 0;
 
   return {
     itemsCount,
     subtotal,
-    bonus,
     discount,
     finalTotal: subtotal - discount
   };
@@ -571,18 +587,63 @@ function updateProductButtons() {
   });
 }
 
+function updateCartStepUI() {
+  if (!elements.cartDrawer) return;
+
+  const isCheckout = elements.cartDrawer.classList.contains("checkout-mode");
+
+  if (elements.cartTitle) {
+    elements.cartTitle.textContent = isCheckout ? "Оформление" : "Ваш заказ";
+  }
+
+  if (elements.cartStepLabel) {
+    elements.cartStepLabel.textContent = isCheckout
+      ? "Укажите контакты и способ оплаты"
+      : "Проверьте состав заказа";
+  }
+
+  if (elements.cartBack) {
+    elements.cartBack.classList.toggle("show", isCheckout);
+  }
+
+  if (!isCheckout && elements.sendOrderBtn) {
+    elements.sendOrderBtn.innerHTML = 'К оформлению <i class="fas fa-arrow-right"></i>';
+  } else {
+    updatePaymentMethodUI();
+  }
+}
+
+function openPromoFields(forceOpen = null) {
+  if (!elements.promoBlock || !elements.promoToggle) return;
+  const shouldOpen = forceOpen ?? !elements.promoBlock.classList.contains("expanded");
+  elements.promoBlock.classList.toggle("expanded", shouldOpen);
+  elements.promoToggle.setAttribute("aria-expanded", String(shouldOpen));
+
+  if (shouldOpen) {
+    setTimeout(() => elements.promoInput?.focus(), 80);
+  }
+}
+
 function updatePromoUI() {
   if (!elements.applyPromoBtn || !elements.promoInput || !elements.promoMessage) return;
 
-  if (appliedPromo === PROMO_CODE) {
+  const isApplied = appliedPromo === PROMO_CODE;
+  elements.promoBlock?.classList.toggle("applied", isApplied);
+
+  if (isApplied) {
     elements.applyPromoBtn.textContent = "Применён";
     elements.applyPromoBtn.classList.add("applied");
     elements.promoInput.value = PROMO_CODE;
-    elements.promoMessage.textContent = "Промокод применён: скидка 20%";
+    elements.promoMessage.textContent = "Скидка 20% применена";
     elements.promoMessage.classList.remove("error");
+    if (elements.promoToggleLabel) elements.promoToggleLabel.textContent = PROMO_CODE;
+    if (elements.promoToggleAction) elements.promoToggleAction.textContent = "−20%";
+    openPromoFields(false);
   } else {
     elements.applyPromoBtn.textContent = "Применить";
     elements.applyPromoBtn.classList.remove("applied");
+    if (elements.promoToggleLabel) elements.promoToggleLabel.textContent = "Есть промокод?";
+    if (elements.promoToggleAction) elements.promoToggleAction.textContent = "Добавить";
   }
 }
 
@@ -653,8 +714,9 @@ function renderCart() {
       </div>
     `;
     elements.cartTotal.textContent = "0 ₽";
+    if (elements.cartSubtotal) elements.cartSubtotal.textContent = "0 ₽";
+    if (elements.cartActionTotal) elements.cartActionTotal.textContent = "0 ₽";
     if (elements.cartCount) elements.cartCount.textContent = "0";
-    if (elements.cartBonus) elements.cartBonus.textContent = "0 ₽";
     if (elements.cartDiscount) elements.cartDiscount.textContent = "0 ₽";
     if (elements.discountRow) elements.discountRow.style.display = "none";
     if (elements.cartDrawer) elements.cartDrawer.classList.add("cart-empty");
@@ -673,8 +735,9 @@ function renderCart() {
 
   const totals = calculateTotals();
   elements.cartTotal.textContent = `${totals.finalTotal} ₽`;
+  if (elements.cartSubtotal) elements.cartSubtotal.textContent = `${totals.subtotal} ₽`;
+  if (elements.cartActionTotal) elements.cartActionTotal.textContent = `${totals.finalTotal} ₽`;
   if (elements.cartCount) elements.cartCount.textContent = totals.itemsCount;
-  if (elements.cartBonus) elements.cartBonus.textContent = `+${totals.bonus} ₽`;
 
   if (totals.discount > 0) {
     if (elements.cartDiscount) elements.cartDiscount.textContent = `−${totals.discount} ₽`;
@@ -772,6 +835,7 @@ function applyPromoCode() {
     appliedPromo = PROMO_CODE;
     elements.promoMessage.textContent = "Промокод применён: скидка 20%";
     elements.promoMessage.classList.remove("error");
+    openPromoFields(false);
     showNotification("Промокод применён");
   } else {
     appliedPromo = "";
@@ -784,8 +848,12 @@ function applyPromoCode() {
 }
 
 function clearCart() {
+  if (cart.length === 0) return;
+  if (!window.confirm("Очистить всю корзину?")) return;
+
   cart.length = 0;
   appliedPromo = "";
+  openPromoFields(false);
 
   if (elements.cartDrawer) {
     elements.cartDrawer.classList.remove("checkout-mode");
@@ -804,6 +872,7 @@ function clearCart() {
 function resetCartAfterOrder() {
   cart.length = 0;
   appliedPromo = "";
+  openPromoFields(false);
 
   if (elements.promoMessage) {
     elements.promoMessage.textContent = "";
@@ -847,7 +916,7 @@ async function sendOrder() {
 
   if (elements.cartDrawer && !elements.cartDrawer.classList.contains("checkout-mode")) {
     elements.cartDrawer.classList.add("checkout-mode");
-    updatePaymentMethodUI();
+    updateCartStepUI();
     showNotification("Введите данные для заказа");
     setTimeout(() => elements.customerPhone?.focus(), 100);
     return;
@@ -1014,6 +1083,7 @@ function bindEvents() {
     changeItemQuantity(button.dataset.name, step);
   });
 
+  elements.promoToggle?.addEventListener("click", () => openPromoFields());
   elements.applyPromoBtn?.addEventListener("click", applyPromoCode);
   elements.clearCartBtn?.addEventListener("click", clearCart);
   elements.sendOrderBtn?.addEventListener("click", sendOrder);
@@ -1026,6 +1096,10 @@ function bindEvents() {
   elements.cartToggle?.addEventListener("click", openCart);
   elements.themeToggle?.addEventListener("click", toggleTheme);
   elements.cartClose?.addEventListener("click", closeCart);
+  elements.cartBack?.addEventListener("click", () => {
+    elements.cartDrawer?.classList.remove("checkout-mode");
+    updateCartStepUI();
+  });
   elements.cartOverlay?.addEventListener("click", closeCart);
 
   elements.mobileMiniCart?.addEventListener("click", openCart);
@@ -1066,6 +1140,7 @@ bindEvents();
 setupActiveCategoryNav();
 updateOptionCards();
 updatePaymentMethodUI();
+updateCartStepUI();
 renderCart();
 initPaymentAvailability();
 checkReturnedPayment();

@@ -131,10 +131,10 @@
           томаты, сыр и луковые колечки.
         </p>
         <div class="card-actions">
-          <div class="price">690 ₽</div>
+          <div class="price">510 ₽</div>
           <button class="btn add-to-cart"
                   data-name="Мон-Моди"
-                  data-price="690"
+                  data-price="510"
                   data-image="mon.jpg"
                   type="button">
             Добавить в заказ
@@ -151,10 +151,10 @@
           капуста, сыр и ананасы.
         </p>
         <div class="card-actions">
-          <div class="price">570 ₽</div>
+          <div class="price">500 ₽</div>
           <button class="btn add-to-cart"
                   data-name="Фантанини"
-                  data-price="570"
+                  data-price="500"
                   data-image="fantanuni.jpg"
                   type="button">
             Добавить в заказ
@@ -463,7 +463,6 @@
     </div>
     <p>© 2026 KUNIK. Онлайн-заказ еды в Мытищах.</p>
     <p class="footer-requisites">ИП Кунык Артём Олегович · ИНН 236105423168 · ОГРНИП 325237500125905</p>
-    <p class="footer-author">Веб-сайт разработан Кунык Андреем</p>
   </footer>
 
   <a class="floating-telegram" href="https://t.me/andreytoo" target="_blank" aria-label="Telegram">
@@ -474,8 +473,19 @@
 
   <aside class="cart-drawer" id="cart-drawer">
     <div class="cart-drawer-header">
-      <h2>Ваш заказ</h2>
-      <button class="cart-close" id="cart-close" type="button">&times;</button>
+      <div class="cart-header-copy">
+        <button class="cart-back" id="cart-back" type="button" aria-label="Вернуться к корзине">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <div>
+          <h2 id="cart-title">Ваш заказ</h2>
+          <span class="cart-step-label" id="cart-step-label">Проверьте состав заказа</span>
+        </div>
+      </div>
+      <div class="cart-header-actions">
+        <button class="cart-clear-link" id="clear-cart-btn" type="button">Очистить</button>
+        <button class="cart-close" id="cart-close" type="button" aria-label="Закрыть корзину">&times;</button>
+      </div>
     </div>
 
     <div class="cart-drawer-body" id="cart-items">
@@ -483,16 +493,25 @@
     </div>
 
     <div class="cart-drawer-footer">
-      <div class="promo-block">
-        <label for="promo-input" class="promo-label">Промокод</label>
-        <div class="promo-row">
-          <input type="text" id="promo-input" class="promo-input" placeholder="Введите промокод">
-          <button class="btn promo-btn" id="apply-promo-btn" type="button">Применить</button>
+      <div class="promo-block" id="promo-block">
+        <button class="promo-toggle" id="promo-toggle" type="button" aria-expanded="false">
+          <span class="promo-toggle-title">
+            <i class="fas fa-ticket-alt"></i>
+            <span id="promo-toggle-label">Есть промокод?</span>
+          </span>
+          <span class="promo-toggle-action" id="promo-toggle-action">Добавить</span>
+        </button>
+        <div class="promo-fields" id="promo-fields">
+          <div class="promo-row">
+            <input type="text" id="promo-input" class="promo-input" placeholder="Введите промокод">
+            <button class="btn promo-btn" id="apply-promo-btn" type="button">Применить</button>
+          </div>
+          <p class="promo-message" id="promo-message"></p>
         </div>
-        <p class="promo-message" id="promo-message"></p>
       </div>
+
       <div class="customer-block" id="customer-block">
-        <label class="promo-label">Данные для заказа</label>
+        <div class="checkout-section-title">Контактные данные</div>
 
         <input
           type="text"
@@ -512,7 +531,7 @@
           placeholder="Комментарий к заказу"></textarea>
 
         <fieldset class="payment-methods" id="payment-methods">
-          <legend class="promo-label">Способ оплаты</legend>
+          <legend class="checkout-section-title">Способ оплаты</legend>
 
           <label class="payment-option active">
             <input type="radio" name="payment-method" value="online" checked>
@@ -547,15 +566,11 @@
           </span>
         </label>
       </div>
+
       <div class="cart-summary-list">
         <div class="summary-row">
-          <span>Товаров</span>
-          <strong id="cart-count">0</strong>
-        </div>
-
-        <div class="summary-row">
-          <span>Бонусы к начислению</span>
-          <strong id="cart-bonus">0 ₽</strong>
+          <span>Товары</span>
+          <strong><span id="cart-count">0</span> · <span id="cart-subtotal">0 ₽</span></strong>
         </div>
 
         <div class="summary-row" id="discount-row" style="display: none;">
@@ -564,19 +579,21 @@
         </div>
 
         <div class="summary-row total-row">
-          <span>Сумма заказа</span>
+          <span>Итого</span>
           <strong id="cart-total">0 ₽</strong>
         </div>
       </div>
 
-      <button class="btn checkout-btn payment-submit-btn" id="send-order-btn" type="button">
-        <i class="fas fa-credit-card"></i>
-        К оформлению и оплате
-      </button>
-
-      <button class="btn clear-btn checkout-btn" id="clear-cart-btn" type="button">
-        Очистить корзину
-      </button>
+      <div class="cart-action-bar">
+        <div class="cart-action-total">
+          <span>Итого</span>
+          <strong id="cart-action-total">0 ₽</strong>
+        </div>
+        <button class="btn checkout-btn payment-submit-btn" id="send-order-btn" type="button">
+          К оформлению
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
     </div>
     <div class="order-success" id="order-success">
       <div class="order-success-card receipt-card">

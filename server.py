@@ -38,12 +38,11 @@ PAYMENT_LOCK = threading.Lock()
 
 PROMO_CODE = "OVCHINNIKOV"
 PROMO_DISCOUNT = Decimal("0.20")
-BONUS_RATE = Decimal("0.05")
 
 PRODUCT_PRICES = {
     "Сен-Мишель": 480,
-    "Мон-Моди": 690,
-    "Фантанини": 570,
+    "Мон-Моди": 510,
+    "Фантанини": 500,
     "Крутини": 580,
     "Миникюр": 330,
     "Картофель фри": 150,
@@ -188,7 +187,6 @@ def validate_order(data: dict) -> dict:
     promo_applied = promo == PROMO_CODE
     discount = round_half_up(Decimal(subtotal) * PROMO_DISCOUNT) if promo_applied else 0
     total = subtotal - discount
-    bonus = int(Decimal(subtotal) * BONUS_RATE)
 
     client_order_id = str(data.get("orderId", "")).strip().upper()
     order_id = (
@@ -204,7 +202,6 @@ def validate_order(data: dict) -> dict:
         "subtotal": subtotal,
         "discount": discount,
         "total": total,
-        "bonus": bonus,
         "promo": PROMO_CODE if promo_applied else "",
         "customer": {
             "name": customer_name,
@@ -247,7 +244,6 @@ def build_telegram_message(order: dict, payment_method: str, payment_id: str = "
         [
             "",
             f"Товаров: {order['items_count']}",
-            f"Бонусы: +{order['bonus']} ₽",
         ]
     )
 
