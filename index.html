@@ -530,31 +530,21 @@
           class="customer-input customer-textarea"
           placeholder="Комментарий к заказу"></textarea>
 
-        <fieldset class="payment-methods" id="payment-methods">
-          <legend class="checkout-section-title">Способ оплаты</legend>
+        <section class="payment-methods" id="payment-methods" aria-labelledby="payment-title">
+          <h3 class="checkout-section-title" id="payment-title">Оплата</h3>
 
-          <label class="payment-option active">
-            <input type="radio" name="payment-method" value="online" checked>
+          <div class="payment-option active online-only-payment" id="online-payment-card">
             <span class="payment-option-icon"><i class="fas fa-credit-card"></i></span>
             <span class="payment-option-copy">
-              <strong>Оплатить онлайн</strong>
-              <small>Переход на защищённую страницу ЮKassa</small>
+              <strong>Онлайн-оплата через ЮKassa</strong>
+              <small>Банковская карта, СБП и другие доступные способы</small>
             </span>
-          </label>
-
-          <label class="payment-option">
-            <input type="radio" name="payment-method" value="cash">
-            <span class="payment-option-icon"><i class="fas fa-wallet"></i></span>
-            <span class="payment-option-copy">
-              <strong>Оплата при получении</strong>
-              <small>Заказ сразу поступит сотруднику</small>
-            </span>
-          </label>
+          </div>
 
           <p class="payment-method-note" id="payment-method-note">
-            После нажатия кнопки вы перейдёте на страницу оплаты ЮKassa.
+            Заказ поступит сотруднику только после успешной оплаты.
           </p>
-        </fieldset>
+        </section>
 
         <label class="legal-consent">
           <input type="checkbox" id="legal-consent">

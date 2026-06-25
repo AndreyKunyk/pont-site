@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a0b0f">
+  <title>KUNIK — управление наличием</title>
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="admin-header">
+      <div>
+        <span class="eyebrow">KUNIK ADMIN</span>
+        <h1>Наличие товаров</h1>
+        <p>Включайте и отключайте позиции без изменения кода сайта.</p>
+      </div>
+      <div class="header-actions hidden" id="header-actions">
+        <a class="ghost-button" href="https://pont.website" target="_blank" rel="noopener">Открыть сайт</a>
+        <button class="ghost-button" id="logout-button" type="button">Выйти</button>
+      </div>
+    </header>
+
+    <section class="panel login-panel" id="login-panel">
+      <div class="login-icon">K</div>
+      <h2>Вход в панель</h2>
+      <p>Введите пароль администратора.</p>
+      <form id="login-form">
+        <label for="password">Пароль</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+        <button class="primary-button" type="submit">Войти</button>
+      </form>
+      <div class="message" id="login-message" aria-live="polite"></div>
+    </section>
+
+    <section class="hidden" id="inventory-panel">
+      <div class="toolbar panel">
+        <div>
+          <strong id="availability-summary">Загрузка...</strong>
+          <span id="storage-note"></span>
+        </div>
+        <div class="toolbar-actions">
+          <button class="secondary-button" id="enable-all" type="button">Включить всё</button>
+          <button class="secondary-button danger" id="disable-all" type="button">Отключить всё</button>
+        </div>
+      </div>
+      <div id="product-groups"></div>
+      <div class="toast" id="toast" aria-live="polite"></div>
+    </section>
+  </main>
+  <script src="/admin.js" defer></script>
+</body>
+</html>

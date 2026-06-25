@@ -4453,6 +4453,27 @@ html[data-theme="dark"] .payment-method-note {
   transform: none;
 }
 
+.payment-option.online-only-payment {
+  grid-template-columns: 42px 1fr;
+  cursor: default;
+}
+
+.payment-option.online-only-payment:hover {
+  transform: none;
+  border-color: #ff7e1b;
+}
+
+.payment-option.online-only-payment.disabled {
+  opacity: 0.55;
+  border-color: #e7e7e7;
+  background: #f7f7f7;
+}
+
+html[data-theme="dark"] .payment-option.online-only-payment.disabled {
+  background: rgba(255,255,255,0.025);
+  border-color: var(--kunik-border);
+}
+
 
 /* ===== KUNIK: юридические ссылки и согласие ===== */
 .footer-legal-links {
@@ -4922,6 +4943,11 @@ html[data-theme="dark"] .cart-action-total strong {
     border-radius: 13px !important;
   }
 
+
+  .payment-option.online-only-payment {
+    grid-template-columns: 34px 1fr !important;
+  }
+
   .payment-option-copy strong {
     font-size: 12px !important;
   }
@@ -4951,4 +4977,43 @@ html[data-theme="dark"] .cart-action-total strong {
   .cart-drawer.success-mode .cart-step-label {
     display: none !important;
   }
+}
+
+/* Динамическое наличие товаров */
+.item.product-unavailable {
+  position: relative;
+  opacity: .68;
+}
+.item.product-unavailable img {
+  filter: grayscale(.75) saturate(.55);
+}
+.sold-out-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 4;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(18, 19, 24, .9);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, .18);
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(0,0,0,.22);
+}
+.btn.unavailable-button,
+.btn.unavailable-button:hover,
+.open-ser-modal.unavailable-button,
+.open-ser-modal.unavailable-button:hover {
+  cursor: not-allowed;
+  transform: none;
+  color: #777 !important;
+  background: #e7e7e7 !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+html[data-theme="dark"] .btn.unavailable-button,
+html[data-theme="dark"] .open-ser-modal.unavailable-button {
+  color: #8b8f99 !important;
+  background: #23262e !important;
 }

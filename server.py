@@ -2,18 +2,42 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 from decimal import Decimal, ROUND_HALF_UP
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session, send_from_directory
 from flask_cors import CORS
 import json
+import hmac
+import secrets
 import os
 import re
 import sqlite3
 import threading
 import uuid
+from functools import wraps
+from pathlib import Path
+from urllib.parse import urlparse
 
 import requests
 
+try:
+    import psycopg
+    from psycopg.rows import dict_row
+except ImportError:  # pragma: no cover - локальный режим без PostgreSQL
+    psycopg = None
+    dict_row = None
+
 app = Flask(__name__)
+BASE_DIR = Path(__file__).resolve().parent
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
+ADMIN_SESSION_SECRET = os.getenv("ADMIN_SESSION_SECRET") or secrets.token_hex(32)
+INVENTORY_DATABASE_URL = os.getenv("INVENTORY_DATABASE_URL") or os.getenv("DATABASE_URL", "")
+
+app.secret_key = ADMIN_SESSION_SECRET
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SECURE=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    PERMANENT_SESSION_LIFETIME=60 * 60 * 12,
+)
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://pont.website").rstrip("/")
 allowed_origins = [
@@ -65,6 +89,27 @@ SER_OPTIONS = {
     "котлета": 150,
 }
 
+PRODUCT_CATALOG = [
+    {"id": "sen-mishel", "name": "Сен-Мишель", "category": "Шаурма"},
+    {"id": "ser-zhermen", "name": "Сэр-Жермен", "category": "Шаурма"},
+    {"id": "mon-modi", "name": "Мон-Моди", "category": "Шаурма"},
+    {"id": "fantanini", "name": "Фантанини", "category": "Шаурма"},
+    {"id": "krutini", "name": "Крутини", "category": "Шаурма"},
+    {"id": "minikur", "name": "Миникюр", "category": "Шаурма"},
+    {"id": "kartofel-fri", "name": "Картофель фри", "category": "Закуски"},
+    {"id": "syrnye-palochki", "name": "Сырные палочки", "category": "Закуски"},
+    {"id": "lukovye-koltsa", "name": "Луковые кольца", "category": "Закуски"},
+    {"id": "batat", "name": "Батат", "category": "Закуски"},
+    {"id": "krevetki", "name": "Креветки", "category": "Закуски"},
+    {"id": "firmennyi-sous", "name": "Фирменный соус", "category": "Соусы"},
+    {"id": "ketchup", "name": "Кетчуп", "category": "Соусы"},
+    {"id": "chesnochnyi-sous", "name": "Чесночный соус", "category": "Соусы"},
+    {"id": "syrnyi-sous", "name": "Сырный соус", "category": "Соусы"},
+    {"id": "kislo-sladkii-sous", "name": "Кисло-сладкий соус", "category": "Соусы"},
+]
+PRODUCT_BY_ID = {product["id"]: product for product in PRODUCT_CATALOG}
+PRODUCT_BY_NAME = {product["name"]: product for product in PRODUCT_CATALOG}
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -94,6 +139,151 @@ def init_db() -> None:
 
 
 init_db()
+
+
+def inventory_uses_postgres() -> bool:
+    return bool(INVENTORY_DATABASE_URL and psycopg is not None)
+
+
+def init_inventory_db() -> None:
+    if inventory_uses_postgres():
+        with psycopg.connect(INVENTORY_DATABASE_URL, autocommit=True) as connection:
+            connection.execute(
+                """
+                CREATE TABLE IF NOT EXISTS product_availability (
+                    product_id TEXT PRIMARY KEY,
+                    product_name TEXT NOT NULL,
+                    category TEXT NOT NULL,
+                    available BOOLEAN NOT NULL DEFAULT TRUE,
+                    updated_at TEXT NOT NULL
+                )
+                """
+            )
+            for product in PRODUCT_CATALOG:
+                connection.execute(
+                    """
+                    INSERT INTO product_availability (product_id, product_name, category, available, updated_at)
+                    VALUES (%s, %s, %s, TRUE, %s)
+                    ON CONFLICT (product_id) DO NOTHING
+                    """,
+                    (product["id"], product["name"], product["category"], utc_now()),
+                )
+        return
+
+    with get_db() as connection:
+        connection.execute(
+            """
+            CREATE TABLE IF NOT EXISTS product_availability (
+                product_id TEXT PRIMARY KEY,
+                product_name TEXT NOT NULL,
+                category TEXT NOT NULL,
+                available INTEGER NOT NULL DEFAULT 1,
+                updated_at TEXT NOT NULL
+            )
+            """
+        )
+        for product in PRODUCT_CATALOG:
+            connection.execute(
+                """
+                INSERT OR IGNORE INTO product_availability
+                    (product_id, product_name, category, available, updated_at)
+                VALUES (?, ?, ?, 1, ?)
+                """,
+                (product["id"], product["name"], product["category"], utc_now()),
+            )
+
+
+def get_product_availability() -> dict[str, bool]:
+    if inventory_uses_postgres():
+        with psycopg.connect(INVENTORY_DATABASE_URL, row_factory=dict_row) as connection:
+            rows = connection.execute(
+                "SELECT product_name, available FROM product_availability"
+            ).fetchall()
+            return {row["product_name"]: bool(row["available"]) for row in rows}
+
+    with get_db() as connection:
+        rows = connection.execute(
+            "SELECT product_name, available FROM product_availability"
+        ).fetchall()
+        return {row["product_name"]: bool(row["available"]) for row in rows}
+
+
+def set_product_availability(product_id: str, available: bool) -> dict:
+    product = PRODUCT_BY_ID.get(product_id)
+    if not product:
+        raise ValueError("Товар не найден")
+
+    now = utc_now()
+    if inventory_uses_postgres():
+        with psycopg.connect(INVENTORY_DATABASE_URL, autocommit=True) as connection:
+            connection.execute(
+                """
+                UPDATE product_availability
+                SET available = %s, updated_at = %s
+                WHERE product_id = %s
+                """,
+                (available, now, product_id),
+            )
+    else:
+        with get_db() as connection:
+            connection.execute(
+                """
+                UPDATE product_availability
+                SET available = ?, updated_at = ?
+                WHERE product_id = ?
+                """,
+                (1 if available else 0, now, product_id),
+            )
+
+    return {**product, "available": available, "updated_at": now}
+
+
+def set_all_product_availability(available: bool) -> None:
+    now = utc_now()
+    if inventory_uses_postgres():
+        with psycopg.connect(INVENTORY_DATABASE_URL, autocommit=True) as connection:
+            connection.execute(
+                "UPDATE product_availability SET available = %s, updated_at = %s",
+                (available, now),
+            )
+    else:
+        with get_db() as connection:
+            connection.execute(
+                "UPDATE product_availability SET available = ?, updated_at = ?",
+                (1 if available else 0, now),
+            )
+
+
+def base_product_name(name: str) -> str:
+    if name == SER_BASE_NAME or name.startswith(f"{SER_BASE_NAME} + "):
+        return SER_BASE_NAME
+    return name
+
+
+def admin_required(view):
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        if not session.get("kunik_admin"):
+            return jsonify({"ok": False, "error": "Требуется вход"}), 401
+        return view(*args, **kwargs)
+
+    return wrapped
+
+
+def admin_origin_is_valid() -> bool:
+    origin = request.headers.get("Origin", "").strip()
+    if not origin:
+        return True
+    try:
+        return urlparse(origin).netloc == request.host
+    except ValueError:
+        return False
+
+
+try:
+    init_inventory_db()
+except Exception:
+    app.logger.exception("Не удалось инициализировать каталог наличия")
 
 
 def normalize_phone(value: str) -> str:
@@ -141,6 +331,7 @@ def validate_order(data: dict) -> dict:
     if len(raw_items) > 50:
         raise ValueError("Слишком много позиций в заказе")
 
+    availability = get_product_availability()
     validated_items = []
     subtotal = 0
     items_count = 0
@@ -157,6 +348,10 @@ def validate_order(data: dict) -> dict:
 
         if quantity < 1 or quantity > 20:
             raise ValueError("Количество одного товара должно быть от 1 до 20")
+
+        base_name = base_product_name(name)
+        if not availability.get(base_name, False):
+            raise ValueError(f"Товар «{base_name}» временно недоступен")
 
         price = get_product_price(name)
         line_total = price * quantity
@@ -212,16 +407,16 @@ def validate_order(data: dict) -> dict:
     }
 
 
-def build_telegram_message(order: dict, payment_method: str, payment_id: str = "") -> str:
-    paid_online = payment_method == "online"
-    lines = ["Новый заказ с сайта KUNIK", f"Номер заказа: #{order['order_id']}"]
+def build_telegram_message(order: dict, payment_id: str = "") -> str:
+    lines = [
+        "Новый заказ с сайта KUNIK",
+        f"Номер заказа: #{order['order_id']}",
+        "Оплата: онлайн",
+        "Статус: ОПЛАЧЕНО",
+    ]
 
-    if paid_online:
-        lines.extend(["Оплата: онлайн", "Статус: ОПЛАЧЕНО"])
-        if payment_id:
-            lines.append(f"ID платежа: {payment_id}")
-    else:
-        lines.extend(["Оплата: при получении", "Статус: ожидает оплаты"])
+    if payment_id:
+        lines.append(f"ID платежа: {payment_id}")
 
     lines.extend(
         [
@@ -405,7 +600,7 @@ def finalize_paid_payment(payment: dict) -> dict:
         if expected_amount != actual_amount:
             raise ValueError("Сумма подтвержденного платежа не совпадает с заказом")
 
-        send_telegram_message(build_telegram_message(order, "online", payment_id))
+        send_telegram_message(build_telegram_message(order, payment_id))
 
         with get_db() as connection:
             connection.execute(
@@ -420,6 +615,116 @@ def finalize_paid_payment(payment: dict) -> dict:
         return order
 
 
+
+@app.get("/products-availability")
+def products_availability():
+    availability = get_product_availability()
+    return jsonify(
+        {
+            "ok": True,
+            "products": [
+                {**product, "available": availability.get(product["name"], True)}
+                for product in PRODUCT_CATALOG
+            ],
+        }
+    )
+
+
+@app.get("/admin")
+def admin_page():
+    return send_from_directory(BASE_DIR, "admin.html")
+
+
+@app.get("/admin.css")
+def admin_css():
+    return send_from_directory(BASE_DIR, "admin.css")
+
+
+@app.get("/admin.js")
+def admin_js():
+    return send_from_directory(BASE_DIR, "admin.js")
+
+
+@app.get("/admin/status")
+def admin_status():
+    return jsonify(
+        {
+            "ok": True,
+            "configured": bool(ADMIN_PASSWORD),
+            "authenticated": bool(session.get("kunik_admin")),
+            "persistentStorage": inventory_uses_postgres(),
+        }
+    )
+
+
+@app.post("/admin/login")
+def admin_login():
+    if not ADMIN_PASSWORD:
+        return jsonify({"ok": False, "error": "ADMIN_PASSWORD не настроен"}), 503
+    if not admin_origin_is_valid():
+        return jsonify({"ok": False, "error": "Недопустимый источник запроса"}), 403
+
+    password = str((request.get_json(silent=True) or {}).get("password", ""))
+    if not hmac.compare_digest(password, ADMIN_PASSWORD):
+        return jsonify({"ok": False, "error": "Неверный пароль"}), 401
+
+    session.clear()
+    session["kunik_admin"] = True
+    session.permanent = True
+    return jsonify({"ok": True})
+
+
+@app.post("/admin/logout")
+def admin_logout():
+    session.clear()
+    return jsonify({"ok": True})
+
+
+@app.get("/admin/products")
+@admin_required
+def admin_products():
+    availability = get_product_availability()
+    return jsonify(
+        {
+            "ok": True,
+            "products": [
+                {**product, "available": availability.get(product["name"], True)}
+                for product in PRODUCT_CATALOG
+            ],
+            "persistentStorage": inventory_uses_postgres(),
+        }
+    )
+
+
+@app.put("/admin/products/<product_id>")
+@admin_required
+def admin_update_product(product_id: str):
+    if not admin_origin_is_valid():
+        return jsonify({"ok": False, "error": "Недопустимый источник запроса"}), 403
+    payload = request.get_json(silent=True) or {}
+    available = payload.get("available")
+    if not isinstance(available, bool):
+        return jsonify({"ok": False, "error": "Поле available должно быть true или false"}), 400
+    try:
+        product = set_product_availability(product_id, available)
+        return jsonify({"ok": True, "product": product})
+    except ValueError as error:
+        return jsonify({"ok": False, "error": str(error)}), 404
+
+
+@app.put("/admin/products")
+@admin_required
+def admin_update_all_products():
+    if not admin_origin_is_valid():
+        return jsonify({"ok": False, "error": "Недопустимый источник запроса"}), 403
+    payload = request.get_json(silent=True) or {}
+    available = payload.get("available")
+    if not isinstance(available, bool):
+        return jsonify({"ok": False, "error": "Поле available должно быть true или false"}), 400
+    set_all_product_availability(available)
+    return jsonify({"ok": True})
+
+
 @app.get("/health")
 def health():
     return jsonify(
@@ -427,21 +732,19 @@ def health():
             "ok": True,
             "telegramConfigured": bool(BOT_TOKEN and CHAT_ID),
             "yookassaConfigured": yookassa_is_configured(),
+            "adminConfigured": bool(ADMIN_PASSWORD),
         }
     )
 
 
 @app.post("/send-order")
 def send_order():
-    try:
-        order = validate_order(request.get_json(silent=True) or {})
-        send_telegram_message(build_telegram_message(order, "cash"))
-        return jsonify({"ok": True, "orderId": order["order_id"]})
-    except ValueError as error:
-        return jsonify({"ok": False, "error": str(error)}), 400
-    except Exception as error:
-        app.logger.exception("Не удалось отправить заказ")
-        return jsonify({"ok": False, "error": str(error)}), 500
+    return jsonify(
+        {
+            "ok": False,
+            "error": "Заказы принимаются только после онлайн-оплаты",
+        }
+    ), 403
 
 
 @app.post("/create-payment")

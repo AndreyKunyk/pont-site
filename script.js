@@ -48,6 +48,9 @@ function loadSavedCart() {
 
 const cart = loadSavedCart();
 let appliedPromo = localStorage.getItem(STORAGE_KEYS.promo) || localStorage.getItem(STORAGE_KEYS.oldPromo) || "";
+let onlinePaymentAvailable = false;
+let availabilityLoaded = false;
+const productAvailability = {};
 
 const elements = {
   logo: document.querySelector(".logo"),
@@ -209,21 +212,18 @@ function generateOrderId() {
   return `K${year}${month}${day}-${random}`;
 }
 
-function showOrderSuccess(orderId, paymentMethod = "cash") {
+function showOrderSuccess(orderId) {
   if (!elements.cartDrawer) return;
 
   if (elements.orderSuccessId) {
     elements.orderSuccessId.textContent = `#${orderId}`;
   }
 
-  const paidOnline = paymentMethod === "online";
   if (elements.orderSuccessTitle) {
-    elements.orderSuccessTitle.textContent = paidOnline ? "Оплата прошла" : "Заказ принят";
+    elements.orderSuccessTitle.textContent = "Оплата прошла";
   }
   if (elements.orderSuccessMessage) {
-    elements.orderSuccessMessage.textContent = paidOnline
-      ? "Заказ оплачен и передан сотруднику."
-      : "Мы получили ваш заказ и скоро свяжемся с вами.";
+    elements.orderSuccessMessage.textContent = "Заказ оплачен и передан сотруднику.";
   }
 
   elements.cartDrawer.classList.remove("checkout-mode");
@@ -280,28 +280,22 @@ function getPhoneDigits(value) {
   return value.replace(/\D/g, "");
 }
 
-function getSelectedPaymentMethod() {
-  return document.querySelector('input[name="payment-method"]:checked')?.value || "online";
-}
-
 function setOnlinePaymentAvailability(isAvailable) {
-  const onlineInput = document.querySelector('input[name="payment-method"][value="online"]');
-  const cashInput = document.querySelector('input[name="payment-method"][value="cash"]');
-  const onlineOption = onlineInput?.closest(".payment-option");
+  onlinePaymentAvailable = isAvailable;
+  const paymentCard = document.getElementById("online-payment-card");
+  paymentCard?.classList.toggle("disabled", !isAvailable);
 
-  if (!onlineInput) return;
-
-  onlineInput.disabled = !isAvailable;
-  onlineOption?.classList.toggle("disabled", !isAvailable);
-
-  if (!isAvailable && onlineInput.checked && cashInput) {
-    cashInput.checked = true;
+  if (elements.paymentMethodNote) {
+    elements.paymentMethodNote.textContent = isAvailable
+      ? "Заказ поступит сотруднику только после успешной оплаты."
+      : "Онлайн-оплата временно недоступна. Попробуйте оформить заказ немного позже.";
   }
 
-  updatePaymentMethodUI();
-
-  if (!isAvailable && elements.paymentMethodNote) {
-    elements.paymentMethodNote.textContent = "Онлайн-оплата временно недоступна. Выберите оплату при получении.";
+  if (elements.sendOrderBtn && elements.cartDrawer?.classList.contains("checkout-mode")) {
+    elements.sendOrderBtn.disabled = !isAvailable;
+    elements.sendOrderBtn.innerHTML = isAvailable
+      ? '<i class="fas fa-credit-card"></i> Перейти к оплате'
+      : '<i class="fas fa-clock"></i> Оплата временно недоступна';
   }
 }
 
@@ -319,24 +313,12 @@ async function initPaymentAvailability() {
 }
 
 function updatePaymentMethodUI() {
-  const selectedMethod = getSelectedPaymentMethod();
+  if (!elements.sendOrderBtn || !elements.cartDrawer?.classList.contains("checkout-mode")) return;
 
-  document.querySelectorAll(".payment-option").forEach((option) => {
-    const input = option.querySelector('input[name="payment-method"]');
-    option.classList.toggle("active", Boolean(input?.checked));
-  });
-
-  if (elements.paymentMethodNote) {
-    elements.paymentMethodNote.textContent = selectedMethod === "online"
-      ? "После нажатия кнопки вы перейдёте на страницу оплаты ЮKassa."
-      : "Заказ поступит сотруднику, оплатить его можно будет при получении.";
-  }
-
-  if (elements.sendOrderBtn && elements.cartDrawer?.classList.contains("checkout-mode")) {
-    elements.sendOrderBtn.innerHTML = selectedMethod === "online"
-      ? '<i class="fas fa-credit-card"></i> Перейти к оплате'
-      : '<i class="fas fa-paper-plane"></i> Отправить заказ';
-  }
+  elements.sendOrderBtn.disabled = !onlinePaymentAvailable;
+  elements.sendOrderBtn.innerHTML = onlinePaymentAvailable
+    ? '<i class="fas fa-credit-card"></i> Перейти к оплате'
+    : '<i class="fas fa-clock"></i> Оплата временно недоступна';
 }
 
 function buildOrderPayload(orderId = generateOrderId()) {
@@ -420,7 +402,7 @@ async function checkReturnedPayment() {
         clearPendingPayment();
         cleanPaymentQuery();
         showNotification("Оплата прошла. Заказ передан сотруднику.");
-        showOrderSuccess(result.orderId || orderId, "online");
+        showOrderSuccess(result.orderId || orderId);
         return;
       }
 
@@ -468,6 +450,90 @@ function animateProductAdded(triggerButton) {
   }, 650);
 }
 
+
+function getAvailabilityName(name) {
+  return name === SER_PRODUCT.name || name.startsWith(`${SER_PRODUCT.name} + `)
+    ? SER_PRODUCT.name
+    : name;
+}
+
+function isProductAvailable(name) {
+  const availabilityName = getAvailabilityName(name);
+  return productAvailability[availabilityName] !== false;
+}
+
+function setSoldOutState(card, unavailable) {
+  if (!card) return;
+  card.classList.toggle("product-unavailable", unavailable);
+  let badge = card.querySelector(".sold-out-badge");
+  if (unavailable && !badge) {
+    badge = document.createElement("span");
+    badge.className = "sold-out-badge";
+    badge.textContent = "Нет в наличии";
+    card.appendChild(badge);
+  }
+  if (!unavailable && badge) badge.remove();
+}
+
+function applyAvailabilityToMenu() {
+  document.querySelectorAll(".add-to-cart").forEach((button) => {
+    const unavailable = !isProductAvailable(button.dataset.name || "");
+    setSoldOutState(button.closest(".item"), unavailable);
+  });
+
+  const serUnavailable = !isProductAvailable(SER_PRODUCT.name);
+  setSoldOutState(elements.serTriggerCard, serUnavailable);
+  if (elements.serOpenBtn) {
+    elements.serOpenBtn.disabled = serUnavailable;
+    elements.serOpenBtn.classList.toggle("unavailable-button", serUnavailable);
+    elements.serOpenBtn.textContent = serUnavailable
+      ? "Нет в наличии"
+      : (elements.serOpenBtn.dataset.defaultLabel || "Добавить в заказ");
+  }
+  if (elements.serModalAddBtn) {
+    elements.serModalAddBtn.disabled = serUnavailable;
+  }
+}
+
+function removeUnavailableItemsFromCart() {
+  let removed = false;
+  for (let index = cart.length - 1; index >= 0; index -= 1) {
+    if (!isProductAvailable(cart[index].name)) {
+      cart.splice(index, 1);
+      removed = true;
+    }
+  }
+  return removed;
+}
+
+async function loadProductAvailability(showRemovalNotice = true) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/products-availability`, {
+      headers: { "Accept": "application/json" },
+      cache: "no-store"
+    });
+    const data = await response.json();
+    if (!response.ok || !data.ok || !Array.isArray(data.products)) {
+      throw new Error(data.error || "Не удалось загрузить наличие");
+    }
+
+    Object.keys(productAvailability).forEach((key) => delete productAvailability[key]);
+    data.products.forEach((product) => {
+      productAvailability[product.name] = Boolean(product.available);
+    });
+    availabilityLoaded = true;
+
+    const removed = removeUnavailableItemsFromCart();
+    applyAvailabilityToMenu();
+    renderCart();
+    if (removed && showRemovalNotice) {
+      showNotification("Недоступные товары удалены из корзины", true);
+    }
+  } catch (error) {
+    console.warn("Не удалось обновить наличие товаров", error);
+  }
+}
+
 function getButtonProductImage(button) {
   const card = button.closest(".item, .product-card, .menu-card, .product-item, .card");
   const cardImage = card ? card.querySelector("img") : null;
@@ -503,6 +569,10 @@ function updateOptionCards() {
 }
 
 function openSerModal() {
+  if (!isProductAvailable(SER_PRODUCT.name)) {
+    showNotification("Сэр-Жермен временно нет в наличии", true);
+    return;
+  }
   if (!elements.serModal || !elements.serModalOverlay) return;
   elements.serModal.classList.add("active");
   elements.serModalOverlay.classList.add("active");
@@ -568,9 +638,19 @@ function updateProductButtons() {
   document.querySelectorAll(".add-to-cart").forEach((button) => {
     const name = button.dataset.name;
     const item = cart.find((cartItem) => cartItem.name === name);
+    const available = isProductAvailable(name || "");
 
     if (!button.dataset.defaultLabel) {
       button.dataset.defaultLabel = button.textContent.trim() || "Добавить в заказ";
+    }
+
+    button.disabled = !available;
+    button.classList.toggle("unavailable-button", !available);
+
+    if (!available) {
+      button.classList.remove("product-counter-btn");
+      button.textContent = "Нет в наличии";
+      return;
     }
 
     if (item) {
@@ -585,6 +665,7 @@ function updateProductButtons() {
       button.textContent = button.dataset.defaultLabel;
     }
   });
+  applyAvailabilityToMenu();
 }
 
 function updateCartStepUI() {
@@ -598,7 +679,7 @@ function updateCartStepUI() {
 
   if (elements.cartStepLabel) {
     elements.cartStepLabel.textContent = isCheckout
-      ? "Укажите контакты и способ оплаты"
+      ? "Укажите контактные данные"
       : "Проверьте состав заказа";
   }
 
@@ -755,6 +836,10 @@ function renderCart() {
 }
 
 function addProduct(name, price, image, triggerButton = null) {
+  if (!isProductAvailable(name)) {
+    showNotification(`«${getAvailabilityName(name)}» временно нет в наличии`, true);
+    return;
+  }
   hideOrderSuccess();
 
   const existingItem = cart.find((item) => item.name === name);
@@ -772,6 +857,11 @@ function addProduct(name, price, image, triggerButton = null) {
 }
 
 function addSerProductWithOption() {
+  if (!isProductAvailable(SER_PRODUCT.name)) {
+    showNotification("Сэр-Жермен временно нет в наличии", true);
+    closeSerModal();
+    return;
+  }
   const { extra, suffix } = getSelectedSerOptions();
   addProduct(`${SER_PRODUCT.name}${suffix}`, SER_PRODUCT.price + extra, SER_PRODUCT.image, elements.serModalAddBtn);
   closeSerModal();
@@ -936,38 +1026,18 @@ async function sendOrder() {
     return;
   }
 
-  const paymentMethod = getSelectedPaymentMethod();
+  if (!onlinePaymentAvailable) {
+    showNotification("Онлайн-оплата временно недоступна. Попробуйте позже.", true);
+    return;
+  }
+
   const payload = buildOrderPayload();
 
   try {
     elements.sendOrderBtn.disabled = true;
+    elements.sendOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Создаём платёж...';
 
-    if (paymentMethod === "online") {
-      elements.sendOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Создаём платёж...';
-
-      const response = await fetch(`${API_BASE_URL}/create-payment`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      const data = await response.json();
-
-      if (!response.ok || !data.ok) {
-        throw new Error(data.error || "Не удалось создать платёж");
-      }
-
-      savePendingPayment({
-        paymentId: data.paymentId,
-        orderId: data.orderId,
-        createdAt: Date.now()
-      });
-
-      window.location.href = data.confirmationUrl;
-      return;
-    }
-
-    elements.sendOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Отправляем...';
-    const response = await fetch(`${API_BASE_URL}/send-order`, {
+    const response = await fetch(`${API_BASE_URL}/create-payment`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -975,20 +1045,21 @@ async function sendOrder() {
     const data = await response.json();
 
     if (!response.ok || !data.ok) {
-      throw new Error(data.error || "Не удалось отправить заказ");
+      throw new Error(data.error || "Не удалось создать платёж");
     }
 
-    showNotification("Заказ принят. Мы получили ваш заказ.");
-    resetCartAfterOrder();
-    showOrderSuccess(data.orderId || payload.orderId, "cash");
+    savePendingPayment({
+      paymentId: data.paymentId,
+      orderId: data.orderId,
+      createdAt: Date.now()
+    });
+
+    window.location.href = data.confirmationUrl;
   } catch (error) {
     console.error(error);
     showNotification(error.message || "Ошибка соединения с сервером", true);
-  } finally {
-    if (paymentMethod !== "online" || document.visibilityState === "visible") {
-      elements.sendOrderBtn.disabled = false;
-      updatePaymentMethodUI();
-    }
+    elements.sendOrderBtn.disabled = false;
+    updatePaymentMethodUI();
   }
 }
 
@@ -1045,6 +1116,11 @@ function bindEvents() {
       const price = Number(button.dataset.price);
       const image = getButtonProductImage(button);
       const counterAction = event.target.closest("[data-counter-action]")?.dataset.counterAction;
+
+      if (!isProductAvailable(name || "")) {
+        showNotification(`«${getAvailabilityName(name || "Товар") }» временно нет в наличии`, true);
+        return;
+      }
 
       if (!name || !price) {
         console.error("У кнопки товара не заполнены data-name или data-price", button);
@@ -1128,10 +1204,6 @@ function bindEvents() {
     elements.customerPhone.value = formatPhoneNumber(elements.customerPhone.value);
   });
 
-  document.querySelectorAll('input[name="payment-method"]').forEach((input) => {
-    input.addEventListener("change", updatePaymentMethodUI);
-  });
-
   serOptionInputs.forEach((input) => input.addEventListener("change", updateOptionCards));
 }
 
@@ -1143,4 +1215,6 @@ updatePaymentMethodUI();
 updateCartStepUI();
 renderCart();
 initPaymentAvailability();
+loadProductAvailability(false);
+setInterval(() => loadProductAvailability(false), 60000);
 checkReturnedPayment();
