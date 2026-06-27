@@ -95,12 +95,15 @@ const elements = {
   cartTitle: document.getElementById("cart-title"),
   cartStepLabel: document.getElementById("cart-step-label"),
 
-  serTriggerCard: document.getElementById("ser-product-trigger"),
-  serOpenBtn: document.querySelector(".open-ser-modal"),
-  serModal: document.getElementById("ser-modal"),
-  serModalOverlay: document.getElementById("product-modal-overlay"),
-  serModalClose: document.getElementById("ser-modal-close"),
-  serModalAddBtn: document.getElementById("ser-modal-add-btn"),
+  productModal: document.getElementById("product-modal"),
+  productModalOverlay: document.getElementById("product-modal-overlay"),
+  productModalClose: document.getElementById("product-modal-close"),
+  productModalImage: document.getElementById("product-modal-image"),
+  productModalTitle: document.getElementById("product-modal-title"),
+  productModalDesc: document.getElementById("product-modal-desc"),
+  productModalPrice: document.getElementById("product-modal-price"),
+  productModalOptions: document.getElementById("product-modal-options"),
+  productModalAddBtn: document.getElementById("product-modal-add-btn"),
 
   notification: document.getElementById("notification"),
 
@@ -111,6 +114,7 @@ const elements = {
 
 const serOptionCards = document.querySelectorAll(".option-card");
 const serOptionInputs = document.querySelectorAll('input[name="ser-addon"]');
+let currentModalProduct = null;
 
 let logoTapCount = 0;
 let logoTapTimer = null;
@@ -476,22 +480,26 @@ function setSoldOutState(card, unavailable) {
 }
 
 function applyAvailabilityToMenu() {
-  document.querySelectorAll(".add-to-cart").forEach((button) => {
-    const unavailable = !isProductAvailable(button.dataset.name || "");
-    setSoldOutState(button.closest(".item"), unavailable);
+  document.querySelectorAll(".menu .item").forEach((card) => {
+    const product = getProductFromCard(card);
+    if (!product) return;
+
+    const unavailable = !isProductAvailable(product.name);
+    setSoldOutState(card, unavailable);
+
+    card.querySelectorAll(".add-to-cart, .open-ser-modal").forEach((button) => {
+      button.disabled = unavailable;
+      button.classList.toggle("unavailable-button", unavailable);
+      button.textContent = unavailable
+        ? "Нет в наличии"
+        : (button.dataset.defaultLabel || "Добавить в заказ");
+    });
   });
 
-  const serUnavailable = !isProductAvailable(SER_PRODUCT.name);
-  setSoldOutState(elements.serTriggerCard, serUnavailable);
-  if (elements.serOpenBtn) {
-    elements.serOpenBtn.disabled = serUnavailable;
-    elements.serOpenBtn.classList.toggle("unavailable-button", serUnavailable);
-    elements.serOpenBtn.textContent = serUnavailable
-      ? "Нет в наличии"
-      : (elements.serOpenBtn.dataset.defaultLabel || "Добавить в заказ");
-  }
-  if (elements.serModalAddBtn) {
-    elements.serModalAddBtn.disabled = serUnavailable;
+  if (currentModalProduct && elements.productModalAddBtn) {
+    const unavailable = !isProductAvailable(currentModalProduct.name);
+    elements.productModalAddBtn.disabled = unavailable;
+    updateProductModalPrice();
   }
 }
 
@@ -540,6 +548,31 @@ function getButtonProductImage(button) {
   return button.dataset.image || (cardImage ? cardImage.getAttribute("src") : "") || "5215357575149325867.jpg";
 }
 
+function getProductFromCard(card) {
+  if (!card) return null;
+
+  const title = card.querySelector("h3")?.textContent.trim();
+  const description = card.querySelector("p")?.textContent.replace(/\s+/g, " ").trim();
+  const imageElement = card.querySelector("img");
+  const actionButton = card.querySelector(".add-to-cart, .open-ser-modal");
+  const priceText = card.querySelector(".price")?.textContent || actionButton?.dataset.price || "0";
+  const price = Number(actionButton?.dataset.price || priceText.replace(/[^0-9]/g, ""));
+  const image = actionButton?.dataset.image || imageElement?.getAttribute("src") || "";
+
+  if (!title || !Number.isFinite(price) || price <= 0) return null;
+
+  return {
+    name: actionButton?.dataset.name || title,
+    title,
+    description: description || "Описание уточняется.",
+    price,
+    image,
+    card,
+    triggerButton: actionButton,
+    hasOptions: title === SER_PRODUCT.name
+  };
+}
+
 function getSelectedSerOptions() {
   const selected = Array.from(document.querySelectorAll('input[name="ser-addon"]:checked')).map((input) => ({
     title: input.dataset.title,
@@ -552,10 +585,19 @@ function getSelectedSerOptions() {
   return { selected, extra, suffix };
 }
 
-function updateSerModalPrice() {
-  if (!elements.serModalAddBtn) return;
-  const { extra } = getSelectedSerOptions();
-  elements.serModalAddBtn.textContent = `В корзину за ${SER_PRODUCT.price + extra} ₽`;
+function updateProductModalPrice() {
+  if (!elements.productModalAddBtn || !currentModalProduct) return;
+
+  const unavailable = !isProductAvailable(currentModalProduct.name);
+  if (unavailable) {
+    elements.productModalAddBtn.disabled = true;
+    elements.productModalAddBtn.textContent = "Нет в наличии";
+    return;
+  }
+
+  elements.productModalAddBtn.disabled = false;
+  const extra = currentModalProduct.hasOptions ? getSelectedSerOptions().extra : 0;
+  elements.productModalAddBtn.textContent = `В корзину за ${currentModalProduct.price + extra} ₽`;
 }
 
 function updateOptionCards() {
@@ -565,28 +607,123 @@ function updateOptionCards() {
     card.classList.toggle("active", input.checked);
   });
 
-  updateSerModalPrice();
+  updateProductModalPrice();
 }
 
-function openSerModal() {
-  if (!isProductAvailable(SER_PRODUCT.name)) {
-    showNotification("Сэр-Жермен временно нет в наличии", true);
-    return;
-  }
-  if (!elements.serModal || !elements.serModalOverlay) return;
-  elements.serModal.classList.add("active");
-  elements.serModalOverlay.classList.add("active");
-  document.body.style.overflow = "hidden";
-  document.body.classList.add("modal-open");
+function resetProductOptions() {
+  serOptionInputs.forEach((input) => {
+    input.checked = false;
+  });
   updateOptionCards();
 }
 
-function closeSerModal() {
-  if (!elements.serModal || !elements.serModalOverlay) return;
-  elements.serModal.classList.remove("active");
-  elements.serModalOverlay.classList.remove("active");
+function openProductModal(card) {
+  const product = getProductFromCard(card);
+  if (!product) return;
+
+  if (!isProductAvailable(product.name)) {
+    showNotification(`«${product.title}» временно нет в наличии`, true);
+    return;
+  }
+
+  currentModalProduct = product;
+  resetProductOptions();
+
+  if (elements.productModalImage) {
+    elements.productModalImage.src = product.image;
+    elements.productModalImage.alt = product.title;
+  }
+  if (elements.productModalTitle) elements.productModalTitle.textContent = product.title;
+  if (elements.productModalDesc) elements.productModalDesc.textContent = product.description;
+  if (elements.productModalPrice) {
+    elements.productModalPrice.textContent = `${product.hasOptions ? "Базовая цена" : "Цена"}: ${product.price} ₽`;
+  }
+  if (elements.productModalOptions) {
+    elements.productModalOptions.hidden = !product.hasOptions;
+  }
+
+  updateProductModalPrice();
+  elements.productModal?.classList.add("active");
+  elements.productModalOverlay?.classList.add("active");
+  document.body.style.overflow = "hidden";
+  document.body.classList.add("modal-open");
+}
+
+function closeProductModal() {
+  elements.productModal?.classList.remove("active");
+  elements.productModalOverlay?.classList.remove("active");
   document.body.style.overflow = "";
   document.body.classList.remove("modal-open");
+  currentModalProduct = null;
+}
+
+function initProductDetails() {
+  document.querySelectorAll(".menu .item").forEach((card) => {
+    const product = getProductFromCard(card);
+    if (!product) return;
+
+    card.classList.add("product-clickable");
+
+    const description = card.querySelector("p");
+    if (description && !card.querySelector(".product-details-btn")) {
+      const detailsButton = document.createElement("button");
+      detailsButton.type = "button";
+      detailsButton.className = "product-details-btn";
+      detailsButton.textContent = "Состав и описание";
+      description.insertAdjacentElement("afterend", detailsButton);
+    }
+
+    [card.querySelector("img"), card.querySelector("h3"), card.querySelector("p"), card.querySelector(".product-details-btn")]
+      .filter(Boolean)
+      .forEach((trigger) => {
+        if (!trigger.matches("button")) {
+          trigger.setAttribute("tabindex", "0");
+          trigger.setAttribute("role", "button");
+        }
+        trigger.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          openProductModal(card);
+        });
+        if (!trigger.matches("button")) {
+          trigger.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              openProductModal(card);
+            }
+          });
+        }
+      });
+  });
+}
+
+function addCurrentModalProduct() {
+  if (!currentModalProduct) return;
+
+  if (!isProductAvailable(currentModalProduct.name)) {
+    showNotification(`«${currentModalProduct.title}» временно нет в наличии`, true);
+    closeProductModal();
+    return;
+  }
+
+  if (currentModalProduct.hasOptions) {
+    const { extra, suffix } = getSelectedSerOptions();
+    addProduct(
+      `${currentModalProduct.name}${suffix}`,
+      currentModalProduct.price + extra,
+      currentModalProduct.image,
+      currentModalProduct.triggerButton || elements.productModalAddBtn
+    );
+  } else {
+    addProduct(
+      currentModalProduct.name,
+      currentModalProduct.price,
+      currentModalProduct.image,
+      currentModalProduct.triggerButton || elements.productModalAddBtn
+    );
+  }
+
+  closeProductModal();
 }
 
 function calculateTotals() {
@@ -854,17 +991,6 @@ function addProduct(name, price, image, triggerButton = null) {
   animateProductAdded(triggerButton);
   pulseCartIndicator();
   showNotification("Добавлено в корзину");
-}
-
-function addSerProductWithOption() {
-  if (!isProductAvailable(SER_PRODUCT.name)) {
-    showNotification("Сэр-Жермен временно нет в наличии", true);
-    closeSerModal();
-    return;
-  }
-  const { extra, suffix } = getSelectedSerOptions();
-  addProduct(`${SER_PRODUCT.name}${suffix}`, SER_PRODUCT.price + extra, SER_PRODUCT.image, elements.serModalAddBtn);
-  closeSerModal();
 }
 
 function changeItemQuantity(name, step) {
@@ -1180,19 +1306,23 @@ function bindEvents() {
 
   elements.mobileMiniCart?.addEventListener("click", openCart);
 
-  elements.serTriggerCard?.addEventListener("click", (event) => {
-    if (event.target.closest(".open-ser-modal")) return;
-    openSerModal();
+  document.querySelectorAll(".open-ser-modal").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      openProductModal(button.closest(".item"));
+    });
   });
 
-  elements.serOpenBtn?.addEventListener("click", (event) => {
-    event.stopPropagation();
-    openSerModal();
-  });
+  elements.productModalClose?.addEventListener("click", closeProductModal);
+  elements.productModalOverlay?.addEventListener("click", closeProductModal);
+  elements.productModalAddBtn?.addEventListener("click", addCurrentModalProduct);
 
-  elements.serModalClose?.addEventListener("click", closeSerModal);
-  elements.serModalOverlay?.addEventListener("click", closeSerModal);
-  elements.serModalAddBtn?.addEventListener("click", addSerProductWithOption);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && elements.productModal?.classList.contains("active")) {
+      closeProductModal();
+    }
+  });
 
   elements.customerPhone?.addEventListener("focus", () => {
     if (!elements.customerPhone.value.trim()) {
@@ -1208,6 +1338,7 @@ function bindEvents() {
 }
 
 initTheme();
+initProductDetails();
 bindEvents();
 setupActiveCategoryNav();
 updateOptionCards();
